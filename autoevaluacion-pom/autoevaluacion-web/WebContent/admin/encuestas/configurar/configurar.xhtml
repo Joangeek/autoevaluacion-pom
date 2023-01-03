@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/facelets/templates/template.xhtml">
+
+	<ui:define name="titleMenu">
+		<p:outputLabel id="tituloConf" value="#{configurarMB.titulo}" />
+	</ui:define>
+	<ui:define name="barraAcciones">
+		<h:form id="formteba">
+			<p:outputPanel id="outenl" style="floal:right;">
+				<!--  -->
+				<p:commandLink rendered="#{configurarMB.acRegresar}"
+					update=":formteba :pnlP :tituloConf"
+					actionListener="#{configurarMB.lanzarRegresar()}">
+					<p:graphicImage id="btnR" styleClass="imgsBA"
+						title="#{comun['btn.regresar']}" alt="#{comun['btn.regresar']}"
+						url="${requestContexteath}/resources/images/back_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="cmlFechas" rendered="#{configurarMB.acFechas}"
+					update=":formteba :pnlP :tituloConf"
+					actionListener="#{configurarMB.cargarFechas()}">
+					<p:graphicImage id="btnFechas" title="#{comun['btn.programar']}"
+						styleClass="imgsBA" alt="#{comun['btn.programar']}"
+						url="${requestContexteath}/resources/images/horario_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="cmlPreVisualizar"
+					rendered="#{configurarMB.acPreVisualizar}"
+					update=":formteba :pnlP :tituloConf"
+					actionListener="#{configurarMB.cargarPrevisualizacion()}">
+					<p:graphicImage id="btnPrevis"
+						title="#{comun['btn.previsualizar']}" styleClass="imgsBA"
+						alt="#{comun['btn.previsualizar']}"
+						url="${requestContexteath}/resources/images/previsu_f2.gif" />
+				</p:commandLink>
+				<p:commandLink id="cmlConfigurar"
+					rendered="#{configurarMB.acConfigurar}"
+					update=":formteba :pnlP :tituloConf"
+					actionListener="#{configurarMB.cargarGrupoAspectos()}">
+					<p:graphicImage id="btnConf" title="#{comun['btn.configurar']}"
+						styleClass="imgsBA" alt="#{comun['btn.configurar']}"
+						url="${requestContexteath}/resources/images/config_f2.gif" />
+				</p:commandLink>
+				<p:commandLink id="cmlAspectos"
+					rendered="#{configurarMB.acAspectos}"
+					update=":formteba :pnlP :tituloConf"
+					actionListener="#{configurarMB.cargarAspectos()}">
+					<p:graphicImage id="btnAspe" title="#{comun['btn.aspectos']}"
+						styleClass="imgsBA" alt="#{comun['btn.aspectos']}"
+						url="${requestContexteath}/resources/images/aspec_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="cmlSedesprogrames"
+					rendered="#{configurarMB.acSedesProgramas}"
+					update=":formteba :pnlP :tituloConf"
+					actionListener="#{configurarMB.cargarSedesProgramas()}">
+					<p:graphicImage id="btnPsedeProg"
+						title="#{comun['btn.sedes.programas']}" styleClass="imgsBA"
+						alt="#{comun['btn.sedes.programas']}"
+						url="${requestContexteath}/resources/images/aspec_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="cmlCrear" rendered="#{configurarMB.acCrear}"
+					update=":formteba :pnlP "
+					actionListener="#{configurarMB.lanzarCrear(true)}">
+					<p:graphicImage id="btnN" title="#{comun['btn.nuevo']}"
+						styleClass="imgsBA" alt="#{comun['btn.nuevo']}"
+						url="${requestContexteath}/resources/images/new_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="cmlEditar" rendered="#{configurarMB.acEditar}"
+					update=":formteba :pnlP "
+					actionListener="#{configurarMB.lanzarEditar(true)}">
+					<p:graphicImage id="btnE" title="#{comun['btn.editar']}"
+						styleClass="imgsBA" alt="#{comun['btn.editar']}"
+						url="${requestContexteath}/resources/images/edit_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="btnDell" rendered="#{configurarMB.acEliminar}"
+					update=":formteba :pnlP "
+					actionListener="#{configurarMB.lanzarEliminar()}">
+					<p:graphicImage id="btnEl" title="#{comun['btn.eliminar']}"
+						styleClass="imgsBA" alt="#{comun['btn.eliminar']}"
+						url="${requestContexteath}/resources/images/trash_f2.png" />
+					<p:confirm header="Confirmation"
+						message="#{comun['global.msg.lbl.confirm']}" icon="ui-icon-alert" />
+				</p:commandLink>
+			</p:outputPanel>
+		</h:form>
+	</ui:define>
+	<ui:define name="contenido">
+		<p:panel id="pnlP">
+			<p:outputPanel id="pnlTipoE"
+				rendered="#{configurarMB.mostrarEncuestas}">
+				<ui:include src="/admin/encuestas/configurar/tipoEvaluacion.xhtml" />
+			</p:outputPanel>
+			<p:outputPanel id="pnlGrupoAs"
+				rendered="#{configurarMB.mostrarGrupoAspectos}">
+				<ui:include src="/admin/encuestas/configurar/grupoAspecto.xhtml" />
+			</p:outputPanel>
+			<p:outputPanel id="pnlAspecto"
+				rendered="#{configurarMB.mostrarAspectos}">
+				<ui:include src="/admin/encuestas/configurar/aspecto.xhtml" />
+			</p:outputPanel>
+			<p:outputPanel id="pnlFechas"
+				rendered="#{configurarMB.mostrarFechas}">
+				<ui:include src="/admin/encuestas/configurar/fechas.xhtml" />
+			</p:outputPanel>
+			<p:outputPanel id="pnlfechasSP"
+				rendered="#{configurarMB.mostrarSedeprogramas}">
+				<ui:include
+					src="/admin/encuestas/configurar/programacionSedesP.xhtml" />
+			</p:outputPanel>
+			 <p:outputPanel id="pnlPrevisualizar"
+				rendered="#{configurarMB.mostrarPrevisualizar}"> 
+				<ui:include src="/admin/encuestas/configurar/previsualizar.xhtml" />
+			</p:outputPanel>
+			<!-- Includes de tipo evaluacion -->
+			<p:dialog id="dlgNuevoTE" widgetVar="dlgNewTE" modal="true"
+				header="#{encuestas['header.crear.tipo.evaluacion']}"
+				closable="false" visible="#{encuestasMB.crearE}" resizable="false">
+				<ui:include
+					src="/admin/encuestas/configurar/include/crearTipoEval.xhtml" />
+			</p:dialog>
+			<p:dialog id="dlgEditarTE" widgetVar="dlgEditTE" modal="true"
+				header="#{encuestas['header.editar.tipo.evaluacion']}"
+				closable="false" visible="#{encuestasMB.editarE}" resizable="false">
+				<ui:include
+					src="/admin/encuestas/configurar/include/editarTipoEval.xhtml" />
+			</p:dialog>
+
+			<!-- Includes de grupos aspectos -->
+			<p:dialog id="dlgNuevoGA" modal="true"
+				header="#{encuestas['header.editar.grupo.aspectos']}"
+				closable="false" visible="#{grupoAspectoMB.crearG}"
+				resizable="false">
+				<ui:include
+					src="/admin/encuestas/configurar/include/crearGrupAs.xhtml" />
+			</p:dialog>
+			<p:dialog id="dlgEditarGA" modal="true"
+				header="#{encuestas['header.editar.grupo.aspectos']}"
+				closable="false" visible="#{grupoAspectoMB.editarG}"
+				resizable="false">
+				<ui:include
+					src="/admin/encuestas/configurar/include/editarGrupAs.xhtml" />
+			</p:dialog>
+			<!-- Includes de Aspecto -->
+			<p:dialog id="dlgNuevoAS" modal="true"
+				header="#{encuestas['header.crear.aspecto']}" closable="false"
+				visible="#{aspectoMB.crearAS}" resizable="false">
+				<ui:include
+					src="/admin/encuestas/configurar/include/crearAspe.xhtml" />
+			</p:dialog>
+			<p:dialog id="dlgEditarAS" modal="true"
+				header="#{encuestas['header.editar.aspecto']}" closable="false"
+				visible="#{aspectoMB.editarAS}" resizable="false">
+				<ui:include
+					src="/admin/encuestas/configurar/include/editarAspe.xhtml" />
+			</p:dialog>
+			<!-- Includes de Progarmacion fechas -->
+			<p:dialog id="dlgNuevoPro" modal="true"
+				header="#{encuestas['header.crear.aspecto']}" closable="false"
+				visible="#{fechasMB.crearProE}" resizable="false">
+				<ui:include
+					src="/admin/encuestas/configurar/include/crearProgramacion.xhtml" />
+			</p:dialog>
+			<p:dialog id="dlgEditarPro" modal="true"
+				header="#{encuestas['header.editar.aspecto']}" closable="false"
+				visible="#{fechasMB.editarProE}" resizable="false">
+				<ui:include
+					src="/admin/encuestas/configurar/include/editarProgramacion.xhtml" />
+			</p:dialog>
+			<!-- Includes de Progarmacion fechas Sedes programas -->
+			<p:dialog id="dlgNuevoProSP" modal="true"
+				header="#{encuestas['header.crear.porgramacion.sede.programas']}"
+				closable="false" visible="#{spProgramadasMB.crearProSp}"
+				resizable="false">
+				<ui:include
+					src="/admin/encuestas/configurar/include/crearProgSp.xhtml" />
+			</p:dialog>
+			<!-- Confirmacion -->
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+				header="#{comun['pnl.confirmacion']}">
+				<p:commandButton value="#{comun['btn.confirm.yes']}" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="#{comun['btn.confirm.not']}" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

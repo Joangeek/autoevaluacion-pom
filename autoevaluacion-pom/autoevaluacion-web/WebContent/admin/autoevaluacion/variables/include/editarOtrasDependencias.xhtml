@@ -1,0 +1,83 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<h:form id="updateDetailForm">
+		<p:outputPanel>
+
+			<p:panelGrid id="display" columns="3" cellpadding="4"
+				style="width:100%; margin:0 auto;">
+
+				<h:outputLabel for="cargo"
+					value="#{autoevaluacion['lbl.otra.dependencia.cargo']} #{comun['lbl.obligatorio']}" />
+				<p:selectOneMenu id="cargo" filter="true" filterMatchMode="contains"
+					label="#{autoevaluacion['lbl.otra.dependencia.cargo']}"
+					value="#{otrasDepMB.selected.tblthCargo}" style="width:225px">
+					<f:selectItem itemLabel="#{otrasDepMB.selected.tblthCargo.cargo}"
+						itemValue="#{otrasDepMB.selected.tblthCargo}" />
+					<f:selectItems value="#{otrasDepMB.listaCargos}" var="var"
+						itemLabel="#{var.cargo}" />
+					<f:converter converterId="GenericConvertEntity" />
+					<p:ajax update="cargoMsg" event="valueChange" onstart="true" />
+				</p:selectOneMenu>
+				<p:message for="cargo" id="cargoMsg" display="icon" />
+
+				<h:outputLabel for="persona"
+					value="#{autoevaluacion['lbl.otra.dependencia.empleado']} #{comun['lbl.obligatorio']}" />
+				<p:selectOneMenu id="persona" filter="true"
+					filterMatchMode="contains"
+					label="#{autoevaluacion['lbl.otra.dependencia.empleado']}"
+					value="#{otrasDepMB.selected.tblthParticipante}"
+					style="width:225px">
+					<f:selectItem
+						itemLabel="#{otrasDepMB.selected.tblthParticipante.nombre}"
+						 />
+					<f:selectItems  value="#{otrasDepMB.listaPersonal}" var="var"
+						itemLabel="#{var.nombre}" />
+					<f:converter converterId="GenericConvertEntity" />
+					<p:ajax update="personaMsg" process="@this" event="valueChange" onstart="true" />
+				</p:selectOneMenu>
+				<p:message for="persona" id="personaMsg" display="icon" />
+
+				<h:outputLabel for="vigencia"
+					rendered="#{otrasDepMB.selected.vigencia > otrasDepMB.year}"
+					value="#{autoevaluacion['lbl.mecanismo.descripcion']} #{comun['lbl.obligatorio']}" />
+				<p:selectOneMenu id="vigencia"
+					rendered="#{otrasDepMB.selected.vigencia > otrasDepMB.year}"
+					label="#{autoevaluacion['lbl.otra.dependencia.viegncia']}"
+					value="#{otrasDepMB.selected.vigencia}" style="width:225px">
+					<f:selectItem itemLabel="#{otrasDepMB.selected.vigencia}"
+						itemValue="#{otrasDepMB.selected.vigencia}" />
+					<f:selectItems value="#{otrasDepMB.listaVigencias}" var="var"
+						itemLabel="#{var}" itemValue="#{var}" />
+					<f:converter converterId="GenericConvertEntity" />
+					<p:ajax update="vigenciaMsg" event="valueChange" onstart="true" />
+				</p:selectOneMenu>
+				<p:message for="vigencia" id="vigenciaMsg" display="icon" />
+
+				<f:facet name="footer">
+					<p:commandLink id="cmlGuardarEditar" 
+						update="display :formteba :pnlP"
+						actionListener="#{otrasDepMB.editar()}">
+						<p:graphicImage id="btnE" title="#{comun['btn.guardar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/save_f2.png" />
+					</p:commandLink>
+					<p:commandLink id="cmlCancelar" immediate="true"
+						update="display :formteba :pnlP"
+						actionListener="#{otrasDepMB.lanzarEditar(false)}">
+						<p:graphicImage id="btnC" title="#{comun['btn.cancelar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/cancel_f2.png" />
+					</p:commandLink>
+
+				</f:facet>
+			</p:panelGrid>
+
+		</p:outputPanel>
+	</h:form>
+</h:body>
+</html>

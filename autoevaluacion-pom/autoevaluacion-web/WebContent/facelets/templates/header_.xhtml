@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+	<h:form id="formSalida">
+		<div id="divLogo">
+			<p:graphicImage id="imgLogo" title="Unicomfacauca"
+				alt="Unicomfacauca"
+				url="${requestContextPath}/resources/images/Logo_.png" />
+		</div>
+		<div id="divMenu">
+			<p:commandButton id="btn_salida"
+				actionListener="#{loginBean.logout()}" ajax="false" process="@this"
+				immediate="true" onclick="window.location.reload()"
+				style=" float: right;" action="login?faces-redirect=true"
+				value="#{comun['page.btn.salir']}" icon="ui-icon-power" />
+			<p:outputLabel id="lblUsuario" value="#{loginBean.usuario}"
+				title="Usuario Logueado"
+				style="vertical-align: bottom; float: right; margin-top:4px; margin-right:20px; font-weight: bold;
+			font-size-adjust: inherit;	color: #fff; " />
+		</div>
+	</h:form>
+</body>
+</html>

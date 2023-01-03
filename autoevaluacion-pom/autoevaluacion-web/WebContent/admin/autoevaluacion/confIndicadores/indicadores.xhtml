@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:form id="formAspecto">
+	<p:dataTable id="dataTableIndicadores"
+		value="#{indicadoresMB.listaIndicadores}"
+		filteredValue="#{indicadoresMB.listaIndicadoresFilter}" var="te"
+		selection="#{indicadoresMB.selected}" selectionMode="single"
+		rowKey="#{te.oid}" rowIndexVar="rowIndex" widgetVar="dtTable"
+		paginatorAlwaysVisible="false"
+		paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		paginator="true" paginatorPosition="bottom" rows="10"
+		emptyMessage="#{comun['page.table.list.sin.resultados']}"
+		rowsPerPageTemplate="5,10,15,20,30,40,50,100">
+		<p:column width="4%" style="text-align:center">
+			<f:facet name="header">
+					#{comun['lbl.numeral']}
+					</f:facet>
+			<p:outputLabel value="#{rowIndex+1}" styleClass="textTable" />
+		</p:column>
+		<p:ajax event="rowSelect" listener="#{indicadoresMB.onRowSelect()}" />
+		<p:column sortBy="#{te.indicador}" filterBy="#{te.indicador}"
+			width="10%" filterMatchMode="contains">
+			<f:facet name="header">
+				<p:outputLabel value="#{autoevaluacion['lbl.indicador.codigo']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="indicador" value="#{te.indicador}" />
+		</p:column>
+		<p:column width="45%" >
+			<f:facet name="header">
+				<p:outputLabel value="#{autoevaluacion['lbl.indicador.resumen']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputPanel style="text-align: justify;">
+				<p:outputLabel id="resumen" value="#{te.resumen}" />
+			</p:outputPanel>
+		</p:column>
+
+		<p:column filterBy="#{te.orden}" filterMatchMode="contains"
+			width="10%">
+			<f:facet name="header">
+				<p:outputLabel value="#{autoevaluacion['lbl.indicador.orden']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="orden" value="#{te.orden}" />
+		</p:column>
+
+		<p:column headerText="#{autoevaluacion['lbl.indicador.estado']}"
+			style="font-weight:bold; width:8%; text-align:center"
+			sortBy="#{te.estado}" filterMatchMode="exact" filterBy="#{te.estado}">
+			<f:facet name="filter">
+				<p:selectOneMenu onchange="PF('dtTable').filter()">
+					<f:selectItem itemLabel="#{comun['lbl.estado.todos']}"
+						itemValue="#{null}" noSelectionOption="true" />
+					<f:selectItem itemLabel="#{comun['lbl.estado.activo']}"
+						itemValue="1" />
+					<f:selectItem itemLabel="#{comun['lbl.estado.inactivo']}"
+						itemValue="0" />
+				</p:selectOneMenu>
+			</f:facet>
+			<p:commandButton id="btnteEstadoA" rendered="#{te.estado==1}"  update="dataTableIndicadores"
+				actionListener="#{indicadoresMB.cambiarEstado()}"
+				icon="ui-icon-check"
+				title="#{comun['tit.estado.activo']} - #{comun['tit.estado.clic.cambiar']}">
+				<f:setPropertyActionListener target="#{indicadoresMB.selected}"
+					value="#{te}" />
+			</p:commandButton>
+			<p:commandButton id="btnteEstadoI" rendered="#{te.estado==0}"  update="dataTableIndicadores"
+				actionListener="#{indicadoresMB.cambiarEstado()}"
+				icon="ui-icon-close"
+				title="#{comun['tit.estado.inactivo']} - #{comun['tit.estado.clic.cambiar']}">
+				<f:setPropertyActionListener target="#{indicadoresMB.selected}"
+					value="#{te}" />
+			</p:commandButton>
+
+		</p:column>
+	</p:dataTable>
+</h:form>
+</html>

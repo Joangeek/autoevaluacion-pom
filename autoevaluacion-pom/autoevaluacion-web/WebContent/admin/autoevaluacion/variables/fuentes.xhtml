@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/facelets/templates/template.xhtml">
+
+	<ui:define name="titleMenu">
+		<p:outputLabel id="tituloConf" value="#{fuentesMB.titulo}" />
+	</ui:define>
+	<ui:define name="barraAcciones">
+		<h:form id="formteba">
+			<p:outputPanel id="outenl" style="floal:right;">
+				<p:commandLink rendered="#{fuentesMB.acRegresar}" update=":datos ">
+					<p:graphicImage id="btnR" styleClass="imgsBA"
+						title="#{comun['btn.regresar']}" alt="#{comun['btn.regresar']}"
+						url="${requestContexteath}/resources/images/back_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="cmlCrear" rendered="#{fuentesMB.acCrear}"
+					actionListener="#{fuentesMB.lanzarCrear(true)}" update=":pnlP ">
+					<p:graphicImage id="btnN" title="#{comun['btn.nuevo']}"
+						styleClass="imgsBA" alt="#{comun['btn.nuevo']}"
+						url="${requestContexteath}/resources/images/new_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="cmlEditar" rendered="#{fuentesMB.acEditar}"
+					actionListener="#{fuentesMB.lanzarEditar(true)}" update=":pnlP">
+					<p:graphicImage id="btnE" title="#{comun['btn.editar']}"
+						styleClass="imgsBA" alt="#{comun['btn.editar']}"
+						url="${requestContexteath}/resources/images/edit_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="btnDell" rendered="#{fuentesMB.acEliminar}"
+					update=":datos :pnlP " actionListener="#{fuentesMB.eliminar()}">
+					<p:graphicImage id="btnEl" title="#{comun['btn.eliminar']}"
+						styleClass="imgsBA" alt="#{comun['btn.eliminar']}"
+						url="${requestContexteath}/resources/images/trash_f2.png" />
+					<p:confirm header="Confirmation"
+						message="#{comun['global.msg.lbl.confirm']}" icon="ui-icon-alert" />
+				</p:commandLink>
+			</p:outputPanel>
+		</h:form>
+	</ui:define>
+	<ui:define name="contenido">
+		<p:panel id="pnlP">
+			<h:form id="datos">
+				<p:outputPanel>
+					<p:dataTable id="dataTableConF" value="#{fuentesMB.listaFuentes}"
+						filteredValue="#{fuentesMB.listaFuentesFilter}" var="te"
+						selection="#{fuentesMB.selected}" selectionMode="single"
+						rowKey="#{te.oid}" rowIndexVar="rowIndex" widgetVar="dtTable"
+						paginatorAlwaysVisible="false"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						paginator="true" paginatorPosition="bottom" rows="10"
+						emptyMessage="#{comun['page.table.list.sin.resultados']}"
+						rowsPerPageTemplate="5,10,15,20,30,40,50,100">
+						<p:column style="width:16px;text-align:center">
+							<f:facet name="header">
+					#{comun['lbl.numeral']}
+					</f:facet>
+							<p:outputLabel value="#{rowIndex+1}" styleClass="textTable" />
+						</p:column>
+						<p:ajax event="rowSelect" listener="#{fuentesMB.onRowSelect()}" />
+						<!-- <p:column selectionMode="single" 
+						style="width:16px;text-align:center" />-->
+						<p:column filterBy="#{te.nombre}" filterMatchMode="contains">
+							<f:facet name="header">
+								<p:outputLabel value="#{autoevaluacion['lbl.fuente.nombre']}"
+									styleClass="textTable" />
+							</f:facet>
+							<p:outputLabel id="teNombre" value="#{te.nombre}" />
+						</p:column>
+						<p:column headerText="#{autoevaluacion['lbl.fuente.estado']}"
+							style="font-weight:bold; width:8%; text-align:center"
+							filterMatchMode="exact" filterBy="#{te.estado}">
+							<f:facet name="filter">
+								<p:selectOneMenu onchange="PF('dtTable').filter()">
+									<f:selectItem itemLabel="#{comun['lbl.estado.todos']}"
+										itemValue="#{null}" noSelectionOption="true" />
+									<f:selectItem itemLabel="#{comun['lbl.estado.activo']}"
+										itemValue="1" />
+									<f:selectItem itemLabel="#{comun['lbl.estado.inactivo']}"
+										itemValue="0" />
+								</p:selectOneMenu>
+							</f:facet>
+							<!-- update=":formte:dataTableTE" -->
+							<p:commandButton id="btnteEstadoA" rendered="#{te.estado==1}"
+								actionListener="#{fuentesMB.cambiarEstado()}"
+								icon="ui-icon-check" update="dataTableConF"
+								title="#{comun['tit.estado.activo']} - #{comun['tit.estado.clic.cambiar']}">
+								<f:setPropertyActionListener target="#{fuentesMB.selected}"
+									value="#{te}" />
+							</p:commandButton>
+							<p:commandButton id="btnteEstadoI" rendered="#{te.estado==0}"
+								actionListener="#{fuentesMB.cambiarEstado()}"
+								icon="ui-icon-close" update="dataTableConF"
+								title="#{comun['tit.estado.inactivo']} - #{comun['tit.estado.clic.cambiar']}">
+								<f:setPropertyActionListener target="#{fuentesMB.selected}"
+									value="#{te}" />
+							</p:commandButton>
+
+						</p:column>
+					</p:dataTable>
+				</p:outputPanel>
+			</h:form>
+
+			<!-- Includes de grupos aspectos -->
+			<p:dialog id="dlgNuevo" modal="true"
+				visible="#{fuentesMB.lanzarCrear}"
+				header="#{autoevaluacion['header.fuente.crear.fuente']}" 
+				closable="false" resizable="false">
+				<ui:include
+					src="/admin/autoevaluacion/variables/include/crearFuentes.xhtml" />
+			</p:dialog>
+			<p:dialog id="dlgEditar" modal="true"
+				visible="#{fuentesMB.lanzarEditar}"
+				header="#{autoevaluacion['header.fuente.editar.fuente']}"
+				closable="false" resizable="false">
+				<ui:include
+					src="/admin/autoevaluacion/variables/include/editarFuentes.xhtml" />
+			</p:dialog>
+			<!-- Confirmacion -->
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+				header="#{comun['pnl.confirmacion']}">
+				<p:commandButton value="#{comun['btn.confirm.yes']}" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="#{comun['btn.confirm.not']}" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

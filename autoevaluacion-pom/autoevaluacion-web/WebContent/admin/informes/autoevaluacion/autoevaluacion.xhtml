@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/facelets/templates/template.xhtml">
+
+	<ui:define name="titleMenu">
+		<ui:define name="titleMenu">
+			<p:graphicImage styleClass="imgsBA" width="33"
+				url="${requestContexteath}/resources/images/evaluacion.png" />
+			<p:outputLabel id="tituloConf"
+				value="#{informesAutoevalMB.tituloPage}" />
+		</ui:define>
+	</ui:define>
+	<ui:define name="barraAcciones">
+		<h:form id="formteba">
+			<p:outputPanel id="outenl" style="floal:right;">
+				<p:commandLink actionListener="#{informesAutoevalMB.home()}"
+					ajax="false" process="@this" immediate="true">
+					<p:graphicImage id="btnR" styleClass="imgsBA"
+						title="#{comun['btn.regresar']}" alt="#{comun['btn.regresar']}"
+						url="${requestContexteath}/resources/images/back_f2.png" />
+				</p:commandLink>
+				<p:commandLink process="@this" immediate="true"
+					rendered="#{informesAutoevalMB.hayDatos and informesAutoevalMB.realizadas ==0}"
+					onclick=" document.getElementById('formDatos:btn_descargarPDF').click();">
+					<p:graphicImage id="btnPdf" styleClass="imgsBA"
+						title="#{comun['btn.exportar.pdf']}"
+						alt="#{comun['btn.exportar.pdf']}"
+						url="${requestContexteath}/resources/images/pdf.png" />
+				</p:commandLink>
+				<p:commandLink process="@this" immediate="true"
+					rendered="#{informesAutoevalMB.hayDatos and informesAutoevalMB.realizadas ==0}"
+					onclick=" document.getElementById('formDatos:btn_descargarXLS').click();">
+					<p:graphicImage id="btnXls" styleClass="imgsBA"
+						title="#{comun['btn.exportar.xls']}"
+						alt="#{comun['btn.exportar.xls']}"
+						url="${requestContexteath}/resources/images/excel.png" />
+				</p:commandLink>
+
+				<p:commandLink style="float:right;" process="@form" immediate="true"
+				rendered="#{informesAutoevalMB.hayDatos and informesAutoevalMB.realizadas ==1}"
+					onclick=" document.getElementById('formGenerarResultados:btnExportarResultados').click();">
+					<p:graphicImage id="btnExportarPr" styleClass="imgsBA"
+						title="#{comun['btn.exportar.xls']}+++"
+						alt="#{comun['btn.exportar.xls']}"
+						url="${requestContexteath}/resources/images/excel.png" />
+				</p:commandLink>
+
+			</p:outputPanel>
+		</h:form>
+
+
+	</ui:define>
+	<ui:define name="contenido">
+		<h:form id="formGenerarResultados">
+			<p:commandLink style="float:right; visibility: hidden;"
+				onclick="generateexcel('resultadosX')" id="btnExportarResultados">
+
+			</p:commandLink>
+		</h:form>
+		<h:form id="formSelectTipo">
+			<h:panelGrid id="pnlgEncuestas" columns="1"
+				style="width:100%; margin:0 auto;background-color: #72A9D3;">
+				<p:outputPanel style="float:right;">
+					<h:outputLabel for="slcReporte"
+						style="padding:5px; font-size:120%; font-weight:bold; vertical-align: super;"
+						value="#{encuestas['lbl.informes.reporte']}" />
+
+					<p:selectOneMenu id="slcReporte" required="true"
+						converter="GenericConvertEntity"
+						label="#{encuestas['lbl.confEncuestas.previsualizar.encuestas']} #{comun['lbl.obligatorio']}"
+						requiredMessage="#{comun['global.msg.seleccionar.item']}"
+						value="#{informesAutoevalMB.selectedOpc}" style="width:325px">
+						<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+						<f:selectItems value="#{informesAutoevalMB.listaOpcionesReportes}"
+							var="var" itemLabel="#{var.descripcion}" />
+						<p:ajax listener="#{informesAutoevalMB.listarReportes()}"
+							process="@this" update=":formFilters :formteba" />
+						<p:ajax update="msgReporte" event="keyup" onstart="true" />
+					</p:selectOneMenu>
+					<p:message for="slcReporte" id="msgReporte" display="icon" />
+				</p:outputPanel>
+			</h:panelGrid>
+		</h:form>
+		<h:form id="formFilters">
+			<p:panelGrid id="gridRealizacion" cellpadding="4"
+				rendered="#{informesAutoevalMB.mostrarGrid}"
+				style="width:100%; margin:0 auto;">
+				<p:row>
+					<p:column>
+						<h:outputLabel for="slcEncuesta"
+							style="font-size:90%; font-weight:bold;"
+							value="#{encuestas['lbl.informes.grid.encuesta']}" />
+					</p:column>
+					<p:column>
+						<h:outputLabel for="slcSede"
+							style="font-size:90%; font-weight:bold;"
+							value="#{encuestas['lbl.informes.sede']}" />
+					</p:column>
+					<p:column>
+						<h:outputLabel for="slcPrograma"
+							style="font-size:90%; font-weight:bold;"
+							value="#{encuestas['lbl.informes.programa']}" />
+					</p:column>
+					<p:column>
+						<h:outputLabel for="slcPeriodo"
+							style="font-size:90%; font-weight:bold;"
+							value="#{encuestas['lbl.informes.periodo']}" />
+					</p:column>
+
+					<p:column rowspan="2" style="width:5%;">
+						<p:commandLink style="float:right;"
+							update="slcEncuesta slcPeriodo :formteba :formDatos"
+							id="btnGenerarRepo"
+							actionListener="#{informesAutoevalMB.generar()}">
+							<p:graphicImage id="btnGenerar" styleClass="imgsBA"
+								title="#{comun['btn.generar']}" alt="#{comun['btn.generar']}"
+								url="${requestContexteath}/resources/images/evaluacion.png" />
+						</p:commandLink>
+						<p:ajaxStatus onstart="PF('statusDialog').show()"
+							onsuccess="PF('statusDialog').hide()" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:selectOneMenu id="slcEncuesta" required="true"
+							label="#{encuestas['lbl.informes.grid.encuesta']}"
+							requiredMessage="#{comun['global.msg.seleccionar.item']}"
+							value="#{informesAutoevalMB.selected}" style="width:325px">
+							<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+							<f:selectItems value="#{informesAutoevalMB.listaEntuestas}"
+								var="var" itemLabel="#{var.nombre}" />
+							<f:converter converterId="GenericConvertEntity" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="slcSede"
+							label="#{encuestas['lbl.informes.sede']}"
+							value="#{informesAutoevalMB.sedeSelected}" style="width:200px">
+							<f:selectItem itemLabel="#{comun['itemLabel.todas']}"
+								noSelectionOption="true" />
+							<f:selectItems value="#{informesAutoevalMB.listaSedes}" var="var"
+								itemLabel="#{var.nombre}" />
+							<f:converter converterId="GenericConvertEntity" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="slcPrograma" filter="true"
+							filterMatchMode="contains"
+							label="#{encuestas['lbl.informes.programa']}"
+							value="#{informesAutoevalMB.programaSelected}"
+							style="width:325px">
+							<f:selectItem itemLabel="#{comun['itemLabel.todos']}"
+								noSelectionOption="true" />
+							<f:selectItems value="#{informesAutoevalMB.listaProgramas}"
+								var="var" itemLabel="#{var.nombre}" />
+							<f:converter converterId="GenericConvertEntity" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="slcPeriodo" required="true"
+							requiredMessage="#{comun['global.msg.seleccionar.item']}"
+							label="#{encuestas['lbl.informes.periodo']}"
+							value="#{informesAutoevalMB.periodoSelected}" style="width:150px">
+							<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+							<f:selectItems value="#{informesAutoevalMB.listaPeriodos}"
+								var="var" itemLabel="#{var.descripcion}" />
+							<f:converter converterId="GenericConvertEntity" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false">
+				<h:panelGrid columns="1">
+					<p:outputLabel value="#{comun['global.cargando']}"
+						style="padding:5px; font-size:120%; font-weight:bold; align:center; vertical-align: super;" />
+					<p:graphicImage
+						url="${requestContexteath}/resources/images/ajax-loader.gif" />
+				</h:panelGrid>
+			</p:dialog>
+			<p:separator style="width:5px" />
+		</h:form>
+		<h:form id="formDatos">
+			<p:outputPanel id="outPnl">
+				<p:outputPanel id="pnlRealizados"
+					rendered="#{informesAutoevalMB.mostrarDatos}">
+					<ui:include src="/admin/informes/autoevaluacion/realizacion.xhtml" />
+				</p:outputPanel>
+				<p:outputPanel id="pnlresultadosF"
+					rendered="#{informesAutoevalMB.mostrarResultados}">
+					<ui:include src="/admin/informes/autoevaluacion/resultados.xhtml" />
+				</p:outputPanel>
+			</p:outputPanel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

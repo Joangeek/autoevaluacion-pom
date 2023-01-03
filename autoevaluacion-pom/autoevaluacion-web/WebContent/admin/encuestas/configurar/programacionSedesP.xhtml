@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:form id="formProgramacionSedesP">
+
+	<p:dataTable id="dataTableFechasSP"
+		value="#{spProgramadasMB.listaSedesProgramas}" editable="true"
+		filteredValue="#{spProgramadasMB.listaSedesProgramasFilter}" var="te"
+		selection="#{spProgramadasMB.selected}" selectionMode="single"
+		rowKey="#{te.oid}" rowIndexVar="rowIndex" widgetVar="dtTable"
+		paginatorAlwaysVisible="false"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		paginator="true" paginatorPosition="bottom" rows="10"
+		emptyMessage="#{comun['page.table.list.sin.resultados']}"
+		rowsPerPageTemplate="5,10,15,20,30,40,50,100">
+
+		<p:ajax event="rowEdit" listener="#{spProgramadasMB.onRowEdit}" />
+
+		<p:column style="width:16px;text-align:center">
+			<f:facet name="header">
+					#{comun['lbl.numeral']}
+					</f:facet>
+			<p:outputLabel value="#{rowIndex+1}" styleClass="textTable" />
+		</p:column>
+
+		<p:column filterBy="#{te.tblacaSedePrograma.tblacaSede.nombre}"
+			filterMatchMode="in">
+			<f:facet name="filter">
+				<p:selectCheckboxMenu
+					label="#{encuestas['lbl.confEncuestas.fechas.sede']}"
+					onchange="PF('dtTable').filter()" panelStyle="width:155px"
+					scrollHeight="150">
+					<f:selectItems value="#{spProgramadasMB.listaSedesFilter}"
+						var="var" itemValue="#{var.nombre}" itemLabel="#{var.nombre}" />
+				</p:selectCheckboxMenu>
+			</f:facet>
+			<p:outputLabel id="teModulo"
+				value="#{te.tblacaSedePrograma.tblacaSede.nombre}" />
+		</p:column>
+		<p:column
+			filterBy="#{te.tblacaSedePrograma.tblacaPrograma.idclavepro}"
+			filterMatchMode="in">
+			<f:facet name="filter">
+				<p:selectCheckboxMenu
+					label="#{encuestas['lbl.confEncuestas.fechas.programa']}"
+					onchange="PF('dtTable').filter()" panelStyle="width:155px"
+					scrollHeight="150">
+					<f:selectItems value="#{spProgramadasMB.listaProgramasFilter}"
+						var="var" itemValue="#{var.idclavepro}"
+						itemLabel="#{var.idclavepro}" />
+				</p:selectCheckboxMenu>
+			</f:facet>
+			<p:outputLabel id="programa"
+				value="#{te.tblacaSedePrograma.tblacaPrograma.nombre}" />
+		</p:column>
+
+		<p:column headerText="#{encuestas['lbl.confEncuestas.fechas.desde']}">
+			<p:cellEditor>
+				<f:facet name="output">
+					<p:outputLabel id="fechadesde" value="#{te.desde}" />
+				</f:facet>
+				<f:facet name="input">
+					<p:calendar id="fechaDesde" pattern="yyyy-MM-dd"
+						value="#{te.desde}" required="true"
+						requiredMessage="#{comun['global.msg.campo.obligatorio']}"
+						label="#{encuestas['lbl.confEncuestas.fechas.desde']}">
+					</p:calendar>
+				</f:facet>
+			</p:cellEditor>
+		</p:column>
+		<p:column headerText="#{encuestas['lbl.confEncuestas.fechas.hasta']}">
+			<p:cellEditor>
+				<f:facet name="output">
+					<p:outputLabel id="fechaHasta" value="#{te.hasta}" />
+				</f:facet>
+				<f:facet name="input">
+					<p:calendar id="fechaFin" pattern="yyyy-MM-dd" value="#{te.hasta}"
+						required="true"
+						requiredMessage="#{comun['global.msg.campo.obligatorio']}"
+						label="#{encuestas['lbl.confEncuestas.fechas.hasta']}">
+					</p:calendar>
+				</f:facet>
+			</p:cellEditor>
+		</p:column>
+		<p:column style="width:32px;">
+			<p:rowEditor />
+		</p:column>
+		<p:column style="width:32px;">
+			<p:commandButton rendered="#{configurarMB.acEliminar}"
+				actionListener="#{configurarMB.lanzarEliminar()}"
+				 icon="ui-icon-trash"
+				title="#{comun['btn.eliminar']}" style=" margin:0px 0px 0px 0px;">
+				<f:setPropertyActionListener target="#{te}"
+					value="#{spProgramadasMB.selected}" />
+				<p:confirm header="Confirmation"
+					message="#{comun['global.msg.lbl.confirm']}" icon="ui-icon-alert" />
+			</p:commandButton>
+		</p:column>
+	</p:dataTable>
+</h:form>
+</html>

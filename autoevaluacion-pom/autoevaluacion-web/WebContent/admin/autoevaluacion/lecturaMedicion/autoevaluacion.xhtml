@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/facelets/templates/template.xhtml">
+	
+	<ui:define name="titleMenu">
+		<p:graphicImage styleClass="imgsBA" width="33"
+			url="${requestContexteath}/resources/images/proc_auto.png" />
+		<p:outputLabel id="tituloConf" 
+			value="#{diligenciamientoMB.tituloPage}" />
+	
+	</ui:define>
+	 <ui:define name="barraAcciones">
+		<h:form id="formteba">
+			<p:outputPanel id="outenl" style="floal:right;">
+				<p:commandLink actionListener="#{diligenciamientoMB.home()}"
+					ajax="false" process="@this" immediate="true">
+					<p:graphicImage id="btnR" styleClass="imgsBA"
+						title="#{comun['btn.regresar']}" alt="#{comun['btn.regresar']}"
+						url="${requestContexteath}/resources/images/back_f2.png" />
+				</p:commandLink>
+				<p:commandLink process="@this" rendered="#{diligenciamientoMB.esDirDependencia or diligenciamientoMB.esDirPrograma}"
+					actionListener="#{diligenciamientoMB.mostrarIndicadores(diligenciamientoMB.lecturaInd)}"
+					update=":tituloConf :formDatos">
+					<p:graphicImage id="btnPdf" styleClass="imgsBA"
+						title="#{comun['btn.aut.indicadores']}"
+						alt="#{comun['btn.aut.indicadores']}"
+						url="${requestContexteath}/resources/images/indicador.png" />
+				</p:commandLink>
+				<p:commandLink process="@this"
+					rendered="#{diligenciamientoMB.mostrarBtnMatriz}"
+					actionListener="#{diligenciamientoMB.mostrarIndicadores(diligenciamientoMB.matrizInd)}"
+					update=":tituloConf :formDatos">
+					<p:graphicImage id="btnXls" styleClass="imgsBA"
+						title="#{comun['btn.aut.matriz']}"
+						alt="#{comun['btn.aut.matriz']}"
+						url="${requestContexteath}/resources/images/matriz.png" />
+				</p:commandLink>
+			</p:outputPanel>
+		</h:form>
+	</ui:define>
+	<ui:define name="contenido">
+		<h:form id="formGenerarMatriz">
+			<p:commandLink style="float:right; visibility: hidden; "
+				onclick="generateexcel('matriz')" id="btnExportarmatriz">
+
+			</p:commandLink>
+		</h:form>
+		<h:form id="formDatos">
+			<p:outputPanel id="outPnl">
+				<p:outputPanel id="pnlIndicadores"
+					rendered="#{diligenciamientoMB.indicadores}">
+					<ui:include src="/admin/autoevaluacion/lecturaMedicion/indicadores.xhtml" />
+				</p:outputPanel>
+				<p:outputPanel id="pnlmatriz"
+					rendered="#{diligenciamientoMB.matriz}">
+					<ui:include src="/admin/autoevaluacion/lecturaMedicion/matriz.xhtml" />
+				</p:outputPanel>
+			</p:outputPanel>
+		</h:form>
+
+	</ui:define> 
+</ui:composition>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:form id="formGa">
+	<p:dataTable id="dataTableConF"
+		value="#{grupoAspectoMB.listaGrupoAspecto}"
+		filteredValue="#{grupoAspectoMB.listaGrupoAspectoFilter}" var="te"
+		selection="#{grupoAspectoMB.selected}" selectionMode="single"
+		rowKey="#{te.oid}" rowIndexVar="rowIndex" widgetVar="dtTable"
+		paginatorAlwaysVisible="false"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		paginator="true" paginatorPosition="bottom" rows="10"
+		emptyMessage="#{comun['page.table.list.sin.resultados']}"
+		rowsPerPageTemplate="5,10,15,20,30,40,50,100">
+		<p:column style="width:16px;text-align:center">
+			<f:facet name="header">
+					#{comun['lbl.numeral']}
+					</f:facet>
+			<p:outputLabel value="#{rowIndex+1}" styleClass="textTable" />
+		</p:column>
+		<p:ajax event="rowSelect" listener="#{grupoAspectoMB.onRowSelect()}" />
+		<!-- <p:column selectionMode="single" 
+						style="width:16px;text-align:center" />-->
+		<p:column filterBy="#{te.nombre}" filterMatchMode="contains">
+			<f:facet name="header">
+				<p:outputLabel value="#{encuestas['lbl.confEncuestas.nombre']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="teNombre" value="#{te.nombre}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<p:outputLabel value="#{encuestas['lbl.confEncuestas.mensaje']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="teMensaje" value="#{te.mensaje}" />
+		</p:column>
+		<p:column filterBy="#{te.orden}" filterMatchMode="contains">
+			<f:facet name="header">
+				<p:outputLabel value="#{encuestas['lbl.confEncuestas.orden']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="teOrden" value="#{te.orden}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<p:outputLabel value="#{encuestas['lbl.confEncuestas.encuesta']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="teTipoEval"
+				value="#{te.tblencTipoEvaluacion.nombre}" />
+		</p:column>
+	</p:dataTable>
+</h:form>
+</html>

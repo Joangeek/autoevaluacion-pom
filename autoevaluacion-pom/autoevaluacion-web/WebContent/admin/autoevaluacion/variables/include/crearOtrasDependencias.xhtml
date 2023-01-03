@@ -1,0 +1,89 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<h:form id="newDetailForm">
+		<p:outputPanel>
+			<p:panelGrid id="display" columns="3" cellpadding="4"
+				style="width:100%; margin:0 auto;">
+
+				<h:outputLabel for="cardo"
+					value="#{autoevaluacion['lbl.otra.dependencia.cargo']} #{comun['lbl.obligatorio']}" />
+				<p:selectOneMenu id="cardo" required="true" filter="true"
+					filterMatchMode="contains"
+					label="#{autoevaluacion['lbl.otra.dependencia.cargo']}"
+					requiredMessage="#{comun['global.msg.seleccionar.item']}"
+					value="#{otrasDepMB.otraDependencia.tblthCargo}"
+					style="width:225px">
+					<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+					<f:selectItems value="#{otrasDepMB.listaCargos}" var="var"
+						itemLabel="#{var.cargo}" />
+					<f:converter converterId="GenericConvertEntity" />
+					<p:ajax update="cardoMsg" event="valueChange" onstart="true" />
+				</p:selectOneMenu>
+				<p:message for="cardo" id="cardoMsg" display="icon" />
+
+				<h:outputLabel for="persona"
+					value="#{autoevaluacion['lbl.otra.dependencia.empleado']} #{comun['lbl.obligatorio']}" />
+				<p:selectOneMenu id="persona" required="true" filter="true"
+					filterMatchMode="contains"
+					label="#{autoevaluacion['lbl.otra.dependencia.empleado']}"
+					requiredMessage="#{comun['global.msg.seleccionar.item']}"
+					value="#{otrasDepMB.otraDependencia.tblthParticipante}"
+					style="width:225px">
+					<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+					<f:selectItems value="#{otrasDepMB.listaPersonal}" var="var"
+						itemLabel="#{var.nombre}" />
+					<f:converter converterId="GenericConvertEntity" />
+					<p:ajax update="personaMsg" event="valueChange" onstart="true" />
+				</p:selectOneMenu>
+				<p:message for="persona" id="personaMsg" display="icon" />
+
+
+				<h:outputLabel for="vigencia"
+					value="#{autoevaluacion['lbl.otra.dependencia.viegncia']} #{comun['lbl.obligatorio']}" />
+				<p:selectOneMenu id="vigencia" required="true"
+					label="#{autoevaluacion['lbl.otra.dependencia.viegncia']}"
+					requiredMessage="#{comun['global.msg.seleccionar.item']}"
+					value="#{otrasDepMB.otraDependencia.vigencia}" style="width:225px">
+					<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+					<f:selectItems value="#{otrasDepMB.listaVigencias}" var="var"
+						itemLabel="#{var}"/>
+					<p:ajax update="vigenciaMsg" event="valueChange" onstart="true" />
+				</p:selectOneMenu>
+				<p:message for="vigencia" id="vigenciaMsg" display="icon" />
+
+				<f:facet name="footer">
+					<p:commandLink id="cmlGuardarEditar"
+						update="display :formteba :pnlP"
+						actionListener="#{otrasDepMB.crear()}">
+						<p:graphicImage id="btnE" title="#{comun['btn.guardar']}"
+							styleClass="imgsBA" alt="#{comun['btn.guardar']}"
+							url="${requestContextPath}/resources/images/save_f2.png" />
+					</p:commandLink>
+					<p:commandLink id="cmlLimpiar" immediate="true" update="display"
+						process="@this" actionListener="#{otrasDepMB.lanzarCrear(true)}">
+						<p:graphicImage id="btnL" title="#{comun['btn.limpiar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/clear_f2.png" />
+						<p:resetInput target="display" />
+					</p:commandLink>
+					<p:commandLink id="cmlCancelar" immediate="true"
+						style="float:right;"
+						update="display :newDetailForm :pnlP :dlgNuevo"
+						actionListener="#{otrasDepMB.lanzarCrear(false)}">
+						<p:graphicImage id="btnC" title="#{comun['btn.cancelar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/cancel_f2.png" />
+						<p:resetInput target="display" />
+					</p:commandLink>
+				</f:facet>
+			</p:panelGrid>
+
+		</p:outputPanel>
+	</h:form>
+</h:body>
+</html>

@@ -1,0 +1,345 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<h:form id="matriz">
+		<p:panelGrid id="gridSeleccionOd" cellpadding="4"
+			style="width:90%; margin:0 auto;">
+			<p:row>
+				<p:column styleClass="ui-widget-header">
+					<h:outputLabel style="font-size:90%; font-weight:bold;"
+						value="#{autoevaluacion['lbl.lectura.vigencia']}" />
+				</p:column>
+				<p:column styleClass="ui-widget-header">
+					<h:outputLabel for="slcSede"
+						style="font-size:90%; font-weight:bold;"
+						value="#{autoevaluacion['lbl.lectura.sede']}" />
+				</p:column>
+				<p:column styleClass="ui-widget-header">
+					<h:outputLabel for="slcPrograma"
+						style="font-size:90%; font-weight:bold;"
+						value="#{autoevaluacion['lbl.lectura.programa']}" />
+				</p:column>
+				<p:column rowspan="2" styleClass="ui-widget-header"
+					style="width:5%;">
+					<p:commandLink style="float:right;" process="@form"
+						update=" :formteba :formDatos" id="btnGenerarRepo"
+						actionListener="#{dilMatrizMB.cargarInformacion()}">
+						<p:graphicImage id="btnGenerarPr" styleClass="imgsBA"
+							title="#{comun['btn.cargar.indicadores']}"
+							alt="#{comun['btn.cargar.indicadores']}"
+							url="${requestContexteath}/resources/images/evaluacion.png" />
+					</p:commandLink>
+
+				</p:column>
+				<p:column rowspan="2" styleClass="ui-widget-header"
+					rendered="#{dilMatrizMB.exportar}" style="width:5%;">
+					<!--<p:ajaxStatus onstart="PF('statusDialog').show()"
+						onsuccess="PF('statusDialog').hide()" />
+					 onclick="window.open('data:application/vnd.ms-excel,'+document.documentElement.innerHTML)" -->
+					<p:commandLink style="float:right;" process="@form"
+						immediate="true"
+						onclick=" document.getElementById('formGenerarMatriz:btnExportarmatriz').click();">
+						<p:graphicImage id="btnExportarPr" styleClass="imgsBA"
+							title="#{comun['btn.exportar.xls']}"
+							alt="#{comun['btn.exportar.xls']}"
+							url="${requestContexteath}/resources/images/excel.png" />
+					</p:commandLink>
+
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:selectOneMenu id="slcVigencia" required="true"
+						requiredMessage="#{comun['global.msg.seleccionar.item']}"
+						label="#{autoevaluacion['lbl.lectura.vigencia']}"
+						value="#{dilMatrizMB.vigenciaSelected}" style="width:200px">
+						<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+						<f:selectItems value="#{dilMatrizMB.listVigencias}" var="var"
+							itemLabel="#{var.anioVigencia}" />
+						<p:ajax process="@this" event="valueChange" />
+						<f:converter converterId="GenericConvertEntity" />
+					</p:selectOneMenu>
+				</p:column>
+
+				<p:column>
+					<p:selectOneMenu id="slcSede" required="true"
+						requiredMessage="#{comun['global.msg.seleccionar.item']}"
+						label="#{autoevaluacion['lbl.lectura.sede']}"
+						value="#{dilMatrizMB.sedeSelected}" style="width:200px">
+						<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+						<f:selectItems value="#{dilMatrizMB.listaSedes}" var="var"
+							itemLabel="#{var.nombre}" />
+						<p:ajax process="@this" event="valueChange" update="slcPrograma"
+							listener="#{dilMatrizMB.cargarProgramas()}" />
+						<f:converter converterId="GenericConvertEntity" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="slcPrograma" filter="true"
+						filterMatchMode="contains" required="true"
+						requiredMessage="#{comun['global.msg.seleccionar.item']}"
+						label="#{autoevaluacion['lbl.lectura.programa']}"
+						value="#{dilMatrizMB.programaSelected}" style="width:325px">
+						<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+						<f:selectItems value="#{dilMatrizMB.listaSedesProgramas}"
+							var="var" itemLabel="#{var.tblacaPrograma.nombre}" />
+						<f:converter converterId="GenericConvertEntity" />
+					</p:selectOneMenu>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+		<p:separator style="width:5px" />
+
+	</h:form>
+	<p:ajaxStatus onstart="PF('statusDialog').show()"
+		onsuccess="PF('statusDialog').hide()" />
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+		closable="false" resizable="false" showHeader="false">
+		<h:panelGrid columns="1">
+			<p:outputLabel value="#{comun['global.cargando']}"
+				style="padding:5px; font-size:120%; font-weight:bold; align:center; vertical-align: super;" />
+			<p:graphicImage
+				url="${requestContexteath}/resources/images/ajax-loader.gif" />
+		</h:panelGrid>
+	</p:dialog>
+	<!-- CARGA DE INDICADORES -->
+
+
+	<p:outputPanel id="pnlCargarMatriz"
+		rendered="#{dilMatrizMB.mostrarMatriz}">
+		<TABLE id="matriz" class="ui-panelgrid ui-widget"
+			style="width: 100%; border: 1px solid #4297D7;">
+			<TR class="ui-widget-content ui-panelgrid-even">
+				<TD colspan="14"
+					style="font-weight: bold; background-color: #B0C4DE; border: 1px solid #5C9CCC; text-transform: uppercase; text-align: center; line-height: 1cm;">
+					Medición de Autoevaluacion del programa
+					#{dilMatrizMB.programaSelected.tblacaPrograma.nombre},
+					#{dilMatrizMB.programaSelected.tblacaSede.nombre} <BR /> AÑO
+					VIGENCIA #{dilMatrizMB.vigenciaSelected}
+				</TD>
+
+			</TR>
+
+
+			<ui:repeat var="var" value="#{dilMatrizMB.listaResulMatriz}">
+				<TR class="ui-widget-content ui-panelgrid-even">
+					<TD colspan="14" class="ui-panelgrid-cell ui-widget-header"
+						style="font-weight: bold; text-align: center; line-height: 1cm;"><p:outputLabel
+							value="FACTOR: #{var.tblautFactore.nombre} - #{var.ponderacion} %" /></TD>
+				</TR>
+				<TR class="ui-widget-content ui-panelgrid-odd">
+					<TD colspan="14" class="ui-panelgrid-cell"></TD>
+
+				</TR>
+				<ui:repeat var="car"
+					value="#{dilMatrizMB.caracteristicasFactor(var.tblautFactore)}">
+					<TR class="ui-state-default">
+						<TD id="car"
+							style="background-color: #9fda58; color: #000; font-weight: bold;"
+							width="30%"><p:outputLabel
+								value="#{car.tblautCaracteristica.caracteristica}" /></TD>
+						<TD
+							style="background-color: #778877; color: #fff; font-weight: bold"
+							width="6%" class="ui-panelgrid-cell" dir="ltr"><p:outputLabel
+								value="#{car.ponderacion} %" /></TD>
+						<TD colspan="8" bordercolor="RED"
+							style="background-color: #9fda58;"></TD>
+						<TD style="background-color: #9fda58;" width="68px"></TD>
+						<TD style="background-color: #9fda58;" width="68px"></TD>
+						<TD style="background-color: #9fda58;" width="60px"></TD>
+						<TD style="background-color: #9fda58;" width="61px"></TD>
+
+					</TR>
+					<TR>
+						<TD colspan="14"><p:dataTable var="ind" sortBy="#{ind.sorty}"
+								value="#{dilMatrizMB.listaIndicadores(var.tblautFactore,car.tblautCaracteristica)}"
+								rowIndexVar="rowIndex">
+								<p:column width="30%" style="text-align:justify;">
+									<f:facet name="header">
+										<div style="width: 100%; text-align: center;">
+											<p:outputLabel value="INDICADOR" title="Indicador" />
+										</div>
+									</f:facet>
+									<p:outputLabel style="color:#000; font-weight:bold;"
+										value="#{ind.tblautIndicadoresCaracteristica.indicador}" />
+									<p:outputLabel
+										value="- #{ind.tblautIndicadoresCaracteristica.resumen}" />
+								</p:column>
+								<p:column headerText="Peso Ind." width="21"
+									style="text-align:right;">
+									<f:facet name="header">
+										<p:outputLabel value="% Ind"
+											title="Peso (Ponderado) del Indicador" />
+									</f:facet>
+									<p:outputLabel title="Ponderación" value="#{ind.ponderacion}" />
+								</p:column>
+								<p:columns style="background-color:#EFF6FD; text-align:center;"
+									var="fuente" value="#{dilMatrizMB.listaFuentes}"
+									headerText="#{fuente.nombre}">
+									<p:outputLabel
+										style="text-align: center; color:#000; font-weight:bold;"
+										rendered="#{ind.fuentes.contains(fuente.oid)}" 
+										value="#{dilMatrizMB.lectura(fuente,ind.tblautIndicadoresCaracteristica,car.tblautCaracteristica,var.tblautFactore)}" />
+
+								</p:columns>
+								<p:column headerText="Promedio calificación" width="50">
+									<h:outputText
+										style="text-align: center; color:#000; font-weight:bold;"
+										value="#{dilMatrizMB.promedioCalificacion(ind.tblautIndicadoresCaracteristica,car.tblautCaracteristica,var.tblautFactore)}">
+										<f:convertNumber type="number" pattern="#0.00" />
+									</h:outputText>
+								</p:column>
+								<p:column headerText="% respecto a la calificación " width="50">
+									<h:outputText
+										style="text-align: center; color:#000; font-weight:bold;"
+										value="#{dilMatrizMB.porcentajeCalificacion(ind.tblautIndicadoresCaracteristica,car.tblautCaracteristica,var.tblautFactore)}">
+										<f:convertNumber type="number" pattern="#0.00" />
+									</h:outputText>
+								</p:column>
+								<!-- <p:column headerText="Relación con el logro ideal" width="50">
+									<h:outputText id="logro"
+										style="text-align: center; color:#000; font-weight:bold;"
+										value="#{dilMatrizMB.porcentajeCalificacion(ind.tblautIndicadoresCaracteristica,car.tblautCaracteristica,var.tblautFactore)*5}">
+										<f:convertNumber type="number" pattern="#0.00" />
+									</h:outputText>
+								</p:column>  -->
+
+								<p:column headerText="Logro ideal: 5" width="40">
+									<h:outputText title="Cada elemento evaluado con 5"
+										style="text-align: center; color:#000; font-weight:bold;"
+										value="#{(ind.ponderacion*5)/100}">
+										<f:convertNumber type="number" pattern="#0.00" />
+									</h:outputText>
+								</p:column>
+								<p:column headerText="Relación con el logro" width="40">
+									<h:outputText title="Relación con el logro ideal"
+										style="text-align: center; color:#000; font-weight:bold;"
+										value="#{(dilMatrizMB.promedioCalificacion(ind.tblautIndicadoresCaracteristica,car.tblautCaracteristica,var.tblautFactore) * dilMatrizMB.porcentajeCalificacion(ind.tblautIndicadoresCaracteristica,car.tblautCaracteristica,var.tblautFactore))/(dilMatrizMB.porcentajeCalificacion(ind.tblautIndicadoresCaracteristica,car.tblautCaracteristica,var.tblautFactore)*5)}">
+										<f:convertNumber type="number" pattern="#0.00" />
+									</h:outputText>
+								</p:column>
+
+								<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+								<p:summaryRow>
+									<p:column colspan="#{dilMatrizMB.listaFuentes.size()+2}"
+										styleClass="ui-state-default"
+										style="text-align:right; color:#000; font-weight:bold;">
+										<h:outputText value="Total Característica:" />
+									</p:column>
+
+									<!-- <p:column /> styleClass="ui-state-default" -->
+									<p:column styleClass="ui-state-default"
+										style="text-align: center; color:#000; font-weight:bold;">
+										<h:outputText
+											value="#{dilMatrizMB.promedioCalificacionCar(car.tblautCaracteristica,var.tblautFactore)}">
+											<f:convertNumber type="number" pattern="#0.00" />
+										</h:outputText>
+									</p:column>
+									<p:column styleClass="ui-state-default"
+										style="text-align: center; color:#000; font-weight:bold;">
+										<h:outputText
+											value="#{(dilMatrizMB.porcentajeCalificacionCar(car.tblautCaracteristica,var.tblautFactore))}">
+											<f:convertNumber type="number" pattern="#0.00" />
+										</h:outputText>
+									</p:column>
+									<p:column styleClass="ui-state-default"
+										style="text-align: center; color:#000; font-weight:bold;">
+										<h:outputText
+											value="#{((car.ponderacion*var.ponderacion)/100)*5}">
+											<f:convertNumber type="number" pattern="#0.00" />
+										</h:outputText>
+									</p:column>
+
+									<p:column styleClass="ui-state-default"
+										style="text-align: center; color:#000; font-weight:bold;">
+										<h:outputText title="Relación con el logro ideal"
+											value="#{((dilMatrizMB.porcentajeCalificacionCar(car.tblautCaracteristica,var.tblautFactore)*(car.ponderacion/100))*var.ponderacion)/(((car.ponderacion*var.ponderacion)/100)*5)}">
+											<f:convertNumber type="number" pattern="#0.00" />
+										</h:outputText>
+									</p:column>
+								</p:summaryRow>
+							</p:dataTable></TD>
+					</TR>
+				</ui:repeat>
+				<TR>
+					<TD colspan="10"
+						style="line-height: 25px; background-color: #FF9900; border: 1px solid #e3a1a1; text-align: right; color: #000; font-weight: bold;">
+						<h:outputText value="TOTAL FACTOR:" />
+					</TD>
+					<TD bgcolor="#e3a1a1"
+						style="background-color: #FF9900; border: 1px solid #e3a1a1; text-align: right; color: #000; font-weight: bold;">
+						<h:outputText title="Promedio calificación"
+							value="#{dilMatrizMB.promedioCalificacionFac(var.tblautFactore)}">
+							<f:convertNumber type="number" pattern="#0.00" />
+						</h:outputText>
+					</TD>
+					<TD
+						style="background-color: #FF9900; border: 1px solid #e3a1a1; text-align: right; color: #000; font-weight: bold;">
+						<h:outputText title="% respecto a la calificación"
+							value="#{dilMatrizMB.porcentajeCalificacionFac(var.tblautFactore)}">
+							<f:convertNumber type="number" pattern="#0.00" />
+						</h:outputText>
+					</TD>
+					<TD
+						style="background-color: #FF9900; border: 1px solid #e3a1a1; text-align: right; color: #000; font-weight: bold;">
+						<h:outputText title="Logro ideal: 5"
+							value="#{(var.ponderacion*5)}">
+							<f:convertNumber type="number" pattern="#0.00" />
+						</h:outputText>
+					</TD>
+
+					<TD
+						style="background-color: #FF9900; border: 1px solid #e3a1a1; text-align: right; color: #000; font-weight: bold;">
+						<h:outputText title="Relación con el logro ideal"
+							value="#{(dilMatrizMB.porcentajeCalificacionFac(var.tblautFactore)*var.ponderacion)/(var.ponderacion*5)}">
+							<f:convertNumber type="number" pattern="#0.00" />
+						</h:outputText>
+					</TD>
+				</TR>
+				<TR>
+					<TD colspan="14" bgcolor="" height="5px"></TD>
+				</TR>
+			</ui:repeat>
+					<TR>
+					<TD colspan="10"
+						style="line-height: 35px; background-color: #F78181; border: 1px solid #e3a1a1; text-align: right; color: #000; font-weight: bold;">
+						<h:outputText value="CONSOLIDADO TOTAL DEL PROGRAMA:" />
+					</TD>
+					<TD bgcolor="#e3a1a1"
+						style="background-color: #F78181; border: 1px solid #e3a1a1; text-align: right; color: #000; font-weight: bold;">
+						<h:outputText title="Promedio calificación"
+							value="#{dilMatrizMB.promedioCalificacionTotal()/dilMatrizMB.listaResulMatriz.size()}">
+							<f:convertNumber type="number" pattern="#0.00" />
+						</h:outputText>
+					</TD>
+					<TD
+						style="background-color: #F78181; border: 1px solid #e3a1a1; text-align: right; color: #000; font-weight: bold;">
+						<h:outputText title="% respecto a la calificación"
+							value="#{dilMatrizMB.porcentajeCalificacionTotal()/ dilMatrizMB.listaResulMatriz.size()}">
+							<f:convertNumber type="number" pattern="#0.00" />
+						</h:outputText>
+					</TD>
+					<TD
+						style="background-color: #F78181; border: 1px solid #e3a1a1; text-align: right; color: #000; font-weight: bold;">
+						<h:outputText title="Logro ideal: 5"
+							value="#{(100*5)/100}"> <!-- value="#{(var.ponderacion*5)}" -->
+							<f:convertNumber type="number" pattern="#0.00" />
+						</h:outputText>
+					</TD>
+
+					<TD
+						style="background-color: #F78181; border: 1px solid #e3a1a1; text-align: right; color: #000; font-weight: bold;">
+						<h:outputText title="Relación con el logro ideal"
+							value="#{((dilMatrizMB.porcentajeCalificacionTotal()/ dilMatrizMB.listaResulMatriz.size())/5)*100}">
+							<f:convertNumber type="number" pattern="#0.00" />
+						</h:outputText>
+					</TD>
+				</TR>
+		</TABLE>
+	</p:outputPanel>
+</h:body>
+</html>

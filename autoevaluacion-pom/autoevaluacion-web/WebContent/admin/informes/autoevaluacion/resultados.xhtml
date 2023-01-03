@@ -1,0 +1,128 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+
+	<h:form id="detalleResultados">
+		
+		<TABLE id="resultadosX">
+			<TR>
+				<TD><ui:repeat var="grup"
+						value="#{informesAutoevalMB.listaGrupos}" varStatus="status">
+						<p:panelGrid columns="1" style="width:100%;">
+							<f:facet name="header">
+								<p:outputLabel value="#{grup.nombre}"
+									style="font-weight:bold; font-size:125%; text-align:left; color:#000; line-height:2;" />
+							</f:facet>
+
+							<ui:repeat var="var"
+								value="#{informesAutoevalMB.cargarDatos(grup)}"
+								varStatus="status">
+
+								<p:outputPanel id="pnl1"
+									rendered="#{var.padre ==null and var.codigo ==null}">
+									<p:outputLabel
+										style="font-weight:bold; font-size:115%; margin-bootom:10px;"
+										value="#{var.descripcion}" />
+									<p:separator style="border:1px solid #fff;" />
+								</p:outputPanel>
+
+								<p:outputPanel id="pnl2"
+									rendered="#{var.padre ==null and var.codigo !=null}">
+									<p:outputLabel style="font-weight:bold; font-size:120%;"
+										value="#{ var.codigo } - #{var.descripcion}" />
+									<p:panelGrid columns="2">
+										<p:dataTable value="#{informesAutoevalMB.cargarOpciones(var)}"
+											sortBy="#{opc.total}"
+											style="width:90%; margin-left:30px; margin-top:5px;"
+											var="opc">
+											<p:columnGroup type="header">
+												<p:row>
+													<p:column style="text-align:center;"
+														headerText="#{encuestas['lbl.tbl.realizadas.opcion']}" />
+													<p:column style="text-align:center;"
+														headerText="#{encuestas['lbl.tbl.realizadas.cantidad']}" />
+													<p:column style="text-align:center;"
+														headerText="#{encuestas['lbl.tbl.realizadas.porcentaje']}" />
+												</p:row>
+											</p:columnGroup>
+
+											<p:column>
+												<p:outputLabel value="#{opc.nombre}"
+													style="text-align:left;" />
+											</p:column>
+											<p:column>
+												<p:outputLabel value="#{opc.cantidad}" />
+											</p:column>
+											<p:column>
+												<p:outputLabel
+													value="#{(opc.cantidad *100)/informesAutoevalMB.total} %" />
+											</p:column>
+											<p:summaryRow>
+												<p:column style="text-align:left;"> #{encuestas['lbl.tbl.realizadas.totales']}</p:column>
+												<p:column style="text-align:left;">#{informesAutoevalMB.total}</p:column>
+												<p:column style="text-align:left;">100% </p:column>
+											</p:summaryRow>
+										</p:dataTable>
+										<p:chart type="pie" model="#{informesAutoevalMB.grafica}"
+											style="width:400px; height:200px;" />
+									</p:panelGrid>
+									<br />
+								</p:outputPanel>
+
+								<p:outputPanel id="pnl3"
+									rendered="#{var.padre !=null and var.codigo !=null}">
+									<p:outputLabel
+										style="font-weight:100; font-size:120%; margin-left:30px; color:#000;"
+										value="#{ var.codigo } - #{var.descripcion}" />
+
+									<p:panelGrid columns="2">
+										<p:dataTable value="#{informesAutoevalMB.cargarOpciones(var)}"
+											sortBy="#{opc.total}"
+											style="width:90%; margin-left:30px; margin-top:5px;"
+											var="opc">
+											<p:columnGroup type="header">
+												<p:row>
+													<p:column style="text-align:center;"
+														headerText="#{encuestas['lbl.tbl.realizadas.opcion']}" />
+													<p:column style="text-align:center;"
+														headerText="#{encuestas['lbl.tbl.realizadas.cantidad']}" />
+													<p:column style="text-align:center;"
+														headerText="#{encuestas['lbl.tbl.realizadas.porcentaje']}" />
+												</p:row>
+											</p:columnGroup>
+
+											<p:column>
+												<p:outputLabel value="#{opc.nombre}"
+													style="text-align:left;" />
+											</p:column>
+											<p:column>
+												<p:outputLabel value="#{opc.cantidad}" />
+											</p:column>
+											<p:column>
+												<p:outputLabel
+													value="#{(opc.cantidad *100)/informesAutoevalMB.total} %" />
+											</p:column>
+											<p:summaryRow>
+												<p:column style="text-align:left;"> #{encuestas['lbl.tbl.realizadas.totales']}</p:column>
+												<p:column style="text-align:left;">#{informesAutoevalMB.total}</p:column>
+												<p:column style="text-align:left;">100% </p:column>
+											</p:summaryRow>
+										</p:dataTable>
+										<p:chart type="pie" model="#{informesAutoevalMB.grafica}" widgetVar="char"
+											style="width:400px; height:200px;" />
+									</p:panelGrid>
+									<br />
+								</p:outputPanel>
+							</ui:repeat>
+
+						</p:panelGrid>
+					</ui:repeat></TD>
+			</TR>
+		</TABLE>
+	</h:form>
+</h:body>
+</html>

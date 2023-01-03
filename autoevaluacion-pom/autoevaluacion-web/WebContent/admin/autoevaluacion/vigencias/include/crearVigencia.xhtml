@@ -1,0 +1,74 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<h:form id="newDetailForm">
+		<p:outputPanel>
+			<p:panelGrid id="display" columns="3" cellpadding="4"
+				style="width:100%; margin:0 auto;">
+
+				<h:outputLabel for="descripcion"
+					value="#{autoevaluacion['lbl.mecanismo.descripcion']} #{comun['lbl.obligatorio']}" />
+				<p:inputText id="descripcion"
+					value="#{confVigenciaMB.vigencia.anioVigencia}"
+					style="text-transform:uppercase;"
+					onkeyup="javascript:this.value=this.value.toUpperCase();"
+					required="true" maxlength="200"
+					label="#{autoevaluacion['lbl.mecanismo.descripcion']} "
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}">
+					<p:ajax update="descripcionMsg" event="keyup" onstart="true" />
+				</p:inputText>
+				<p:message for="descripcion" id="descripcionMsg" display="icon" />
+
+				<h:outputLabel for="fechaApertutra"
+					value="#{autoevaluacion['lbl.vigencia.fecha.apertura']} #{comun['lbl.obligatorio']}" />
+				<p:calendar id="fechaApertutra" showOn="button" styleClass="input"
+					pattern="yyyy-MM-dd" label="#{entidad['label.fecha_constitucion']}"
+					value="#{confVigenciaMB.vigencia.fechaApertura}">
+				</p:calendar>
+				<p:message for="fechaApertutra" id="msgfechaApertutra"
+					display="icon" />
+
+				<h:outputLabel for="fechaCierre"
+					value="#{autoevaluacion['lbl.vigencia.fecha.cierre']} #{comun['lbl.obligatorio']}" />
+				<p:calendar id="fechaCierre" showOn="button" styleClass="input"
+					pattern="yyyy-MM-dd" label="#{entidad['label.fecha_constitucion']}"
+					value="#{confVigenciaMB.vigencia.fechaCierre}">
+				</p:calendar>
+				<p:message for="fechaCierre" id="msgFechaDesde" display="icon" />
+
+
+				<f:facet name="footer">
+					<p:commandLink id="cmlGuardarEditar"
+						update="display :formteba :pnlP"
+						actionListener="#{confVigenciaMB.crearNuevo()}">
+						<p:graphicImage id="btnE" title="#{comun['btn.guardar']}"
+							styleClass="imgsBA" alt="#{comun['btn.guardar']}"
+							url="${requestContextPath}/resources/images/save_f2.png" />
+					</p:commandLink>
+					<p:commandLink id="cmlLimpiar" immediate="true" update="display"
+						process="@this" actionListener="#{confVigenciaMB.lanzarCrear(true)}">
+						<p:graphicImage id="btnL" title="#{comun['btn.limpiar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/clear_f2.png" />
+						<p:resetInput target="display" />
+					</p:commandLink>
+					<p:commandLink id="cmlCancelar" immediate="true"
+						style="float:right;"
+						update="display :newDetailForm :pnlP :dlgNuevaVigencia"
+						actionListener="#{confVigenciaMB.lanzarCrear(false)}">
+						<p:graphicImage id="btnC" title="#{comun['btn.cancelar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/cancel_f2.png" />
+						<p:resetInput target="display" />
+					</p:commandLink>
+				</f:facet>
+			</p:panelGrid>
+
+		</p:outputPanel>
+	</h:form>
+</h:body>
+</html>

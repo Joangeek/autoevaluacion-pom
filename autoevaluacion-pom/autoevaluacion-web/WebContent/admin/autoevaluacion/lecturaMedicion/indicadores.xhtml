@@ -1,0 +1,386 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<p:outputPanel id="pnlDirPro"
+		rendered="#{diligenciamientoMB.esDirPrograma}">
+		<h:form id="formFiltersDP">
+			<p:panelGrid id="gridSeleccionOd" cellpadding="4"
+				style="width:90%; margin:0 auto;">
+				<p:row>
+					<p:column styleClass="ui-widget-header">
+						<h:outputLabel style="font-size:90%; font-weight:bold;"
+							value="#{autoevaluacion['lbl.lectura.vigencia']}" />
+					</p:column>
+					<!-- <p:column styleClass="ui-widget-header">
+						<h:outputLabel for="slcSede"
+							style="font-size:90%; font-weight:bold;"
+							value="#{autoevaluacion['lbl.lectura.sede']}" />
+					</p:column>  -->
+					<p:column styleClass="ui-widget-header">
+						<h:outputLabel for="slcPrograma"
+							style="font-size:90%; font-weight:bold;"
+							value="#{autoevaluacion['lbl.lectura.programa']}" />
+					</p:column>
+					<p:column rowspan="2" styleClass="ui-widget-header"
+						style="width:5%;">
+						<p:commandLink style="float:right;" process="@form"
+							update=" :formteba :formDatos" id="btnGenerarRepo"
+							actionListener="#{dilIndicadorMB.cargarInformacion()}">
+							<p:graphicImage id="btnGenerarPr" styleClass="imgsBA"
+								title="#{comun['btn.cargar.indicadores']}"
+								alt="#{comun['btn.cargar.indicadores']}"
+								url="${requestContexteath}/resources/images/evaluacion.png" />
+						</p:commandLink>
+						<p:ajaxStatus onstart="PF('statusDialog').show()"
+							onsuccess="PF('statusDialog').hide()" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:selectOneMenu id="slcVigencia" required="true"
+							requiredMessage="#{comun['global.msg.seleccionar.item']}"
+							label="#{autoevaluacion['lbl.lectura.vigencia']}"
+							value="#{dilIndicadorMB.vigenciaSelected}" style="width:200px">
+							<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+							<f:selectItems value="#{dilIndicadorMB.listVigencias}" var="var"
+								itemLabel="#{var.anioVigencia}" />
+							<p:ajax process="@this" event="valueChange" update="slcPrograma"
+								listener="#{dilIndicadorMB.cargarProgramas()}" />
+							<f:converter converterId="GenericConvertEntity" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<!-- <p:column>
+						<p:selectOneMenu id="slcSede" required="true"
+							requiredMessage="#{comun['global.msg.seleccionar.item']}"
+							label="#{autoevaluacion['lbl.lectura.sede']}"
+							value="#{dilIndicadorMB.sedeSelected}" style="width:200px">
+							<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+							<f:selectItems value="#{dilIndicadorMB.listaSedes}" var="var"
+								itemLabel="#{var.nombre}" />
+							<p:ajax process="@this" event="valueChange" update="slcPrograma"
+								listener="#{dilIndicadorMB.cargarProgramas()}" />
+							<f:converter converterId="GenericConvertEntity" />
+						</p:selectOneMenu>
+					</p:column> -->
+					<p:column>
+						<p:selectOneMenu id="slcPrograma" filter="true"
+							filterMatchMode="contains" required="true"
+							requiredMessage="#{comun['global.msg.seleccionar.item']}"
+							label="#{autoevaluacion['lbl.lectura.programa']}"
+							value="#{dilIndicadorMB.programaSelected}" style="width:325px">
+							<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+							<f:selectItems value="#{dilIndicadorMB.listaSedesProgramas}"
+								var="var"
+								itemLabel="#{var.tblacaSede.nombre} - #{var.tblacaPrograma.nombre}" />
+							<f:converter converterId="GenericConvertEntity" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+
+			<p:separator style="width:5px" />
+		</h:form>
+	</p:outputPanel>
+	<p:outputPanel id="pnlDirOt"
+		rendered="#{diligenciamientoMB.esDirDependencia}">
+		<h:form id="formFiltersDo">
+			<p:panelGrid id="gridSeleccionOd" style="width:50%;  margin:0 auto;">
+				<p:row>
+					<p:column styleClass="ui-widget-header">
+						<h:outputLabel style="font-size:90%; font-weight:bold;"
+							value="#{autoevaluacion['lbl.lectura.vigencia']}" />
+					</p:column>
+					<p:column styleClass="ui-widget-header">
+						<h:outputLabel for="slcDependencia"
+							style="font-size:90%; font-weight:bold;"
+							value="#{autoevaluacion['lbl.lectura.dependencia']}" />
+					</p:column>
+					<p:column rowspan="2" styleClass="ui-widget-header"
+						style="width:5%;">
+						<p:commandLink style="float:right;" process="@form"
+							update="slcDependencia :formteba :formDatos" id="btnGenerarRepo"
+							actionListener="#{dilIndicadorMB.cargarInformacion()}">
+							<p:graphicImage id="btnGenerar" styleClass="imgsBA"
+								title="#{comun['btn.cargar.indicadores']}"
+								alt="#{comun['btn.cargar.indicadores']}"
+								url="${requestContexteath}/resources/images/evaluacion.png" />
+						</p:commandLink>
+						<p:ajaxStatus onstart="PF('statusDialog').show()"
+							onsuccess="PF('statusDialog').hide()" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:selectOneMenu id="slcVigencia" required="true"
+							requiredMessage="#{comun['global.msg.seleccionar.item']}"
+							label="#{autoevaluacion['lbl.lectura.vigencia']}"
+							value="#{dilIndicadorMB.vigenciaSelected}" style="width:200px">
+							<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+							<f:selectItems value="#{dilIndicadorMB.listVigencias}" var="var"
+								itemLabel="#{var.anioVigencia}" />
+							<f:converter converterId="GenericConvertEntity" />
+						</p:selectOneMenu>
+						<p:message id="msgslcVigencia" for="slcVigencia" display="icon" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="slcDependencia" required="true"
+							label="#{autoevaluacion['lbl.lectura.dependencia']}"
+							requiredMessage="#{comun['global.msg.seleccionar.item']}"
+							value="#{dilIndicadorMB.dependenciaSelected}">
+							<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+							<f:selectItems value="#{dilIndicadorMB.listaDependencias}"
+								var="var" itemLabel="#{var.tblthCargo.cargo}" />
+							<f:converter converterId="GenericConvertEntity" />
+						</p:selectOneMenu>
+						<p:message id="msgSlcDependencia" for="slcDependencia"
+							display="icon" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<p:separator style="width:2px" />
+
+		</h:form>
+	</p:outputPanel>
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+		closable="false" resizable="false" showHeader="false">
+		<h:panelGrid columns="1">
+			<p:outputLabel value="#{comun['global.cargando']}"
+				style="padding:5px; font-size:120%; font-weight:bold; align:center; vertical-align: super;" />
+			<p:graphicImage
+				url="${requestContexteath}/resources/images/ajax-loader.gif" />
+		</h:panelGrid>
+	</p:dialog>
+	<!-- CARGA DE INDICADORES -->
+
+
+	<p:outputPanel id="pnlCargarIndicadores"
+		rendered="#{dilIndicadorMB.mostrarIndicadores}">
+		<p:tabView id="tabmecanismos" var="mec"
+			rendered="#{diligenciamientoMB.esDirPrograma}"
+			value="#{dilIndicadorMB.cargarMecanismos()}">
+			<p:tab title="#{mec.descripcion}">
+				<p:accordionPanel id="accFactoresOD" var="gru"
+					value="#{dilIndicadorMB.cargarFactores(mec)}">
+					<p:tab title="#{gru.nombre}">
+						<p:dataTable id="dataTableTE" var="ind"
+							value="#{dilIndicadorMB.cargarIndicadores(gru,mec)}"
+							rowKey="#{ind.oid}" rowIndexVar="rowIndex" editable="true"
+							rowStyleClass="#{ind.lectura le 0 ? 'old' : null}"
+							emptyMessage="#{comun['page.table.list.sin.resultados']}">
+
+							<p:ajax event="rowEdit" listener="#{dilIndicadorMB.onRowEdit}" />
+							<p:ajax event="rowEditCancel"
+								listener="#{dilIndicadorMB.onRowCancelOd}" />
+
+							<p:column style="width:2.5%;text-align:center">
+								<f:facet name="header">
+									<p:outputLabel value="#{comun['lbl.numeral']}" />
+								</f:facet>
+								<p:outputLabel value="#{rowIndex+1}" styleClass="textTable" />
+							</p:column>
+							<p:column headerText="#{autoevaluacion['lbl.lectura.indicador']}"
+								style="width:5%">
+								<p:outputLabel
+									value="#{ind.tblautIndicadoresCaracteristica.indicador}" />
+							</p:column>
+							<p:column
+								headerText="#{autoevaluacion['lbl.lectura.descripcion']}"
+								style="width:80%;">
+								<p:outputLabel
+									value="#{ind.tblautIndicadoresCaracteristica.resumen}" />
+							</p:column>
+							<p:column headerText="#{autoevaluacion['lbl.lectura.medicion']}"
+								rendered="#{mec.codigo == 'D'}" style="width:5%">
+								<p:cellEditor>
+									<f:facet name="output">
+										<p:outputLabel value="#{ind.lectura}" />
+									</f:facet>
+									<f:facet name="input">
+										<h:selectOneMenu value="#{dilIndicadorMB.lectura}"
+											style="width:90%">
+											<f:selectItem itemLabel="    5    " itemValue="5" />
+											<f:selectItem itemLabel="    4    " itemValue="4" />
+											<f:selectItem itemLabel="    3    " itemValue="3" />
+											<f:selectItem itemLabel="    2    " itemValue="2" />
+											<f:selectItem itemLabel="    1    " itemValue="1" />
+										</h:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+
+							</p:column>
+							<p:column headerText="#{autoevaluacion['lbl.lectura.medicion']}"
+								rendered="#{mec.codigo == 'N'}" style="width:5%">
+								<p:cellEditor>
+									<f:facet name="output">
+										<p:outputLabel value="#{ind.lectura}" />
+									</f:facet>
+									<f:facet name="input">
+										<h:selectOneMenu value="#{dilIndicadorMB.lectura}"
+											style="width:90%">
+											<f:selectItem itemLabel="    5    " itemValue="5" />
+											<f:selectItem itemLabel="    4    " itemValue="4" />
+											<f:selectItem itemLabel="    3    " itemValue="3" />
+											<f:selectItem itemLabel="    2    " itemValue="2" />
+											<f:selectItem itemLabel="    1    " itemValue="1" />
+
+										</h:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+
+							</p:column>
+							<p:column headerText="#{autoevaluacion['lbl.lectura.medicion']}"
+								rendered="#{mec.codigo == 'T'}" style="width:5%">
+								<p:cellEditor>
+									<f:facet name="output">
+										<p:outputLabel value="#{ind.lectura}" />
+									</f:facet>
+									<f:facet name="input">
+										<h:selectOneMenu value="#{dilIndicadorMB.lectura}"
+											style="width:90%">
+											<f:selectItem itemLabel="    5    " itemValue="5" />
+											<f:selectItem itemLabel="    4    " itemValue="4" />
+											<f:selectItem itemLabel="    3    " itemValue="3" />
+											<f:selectItem itemLabel="    2    " itemValue="2" />
+											<f:selectItem itemLabel="    1    " itemValue="1" />
+										</h:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column style="width:5%">
+								<f:facet name="header">
+									<p:graphicImage width="16" id="brnHelp" style="cursor:pointer;"
+										alt="#{comun['btn.cargar.indicadores']}"
+										url="${requestContexteath}/resources/images/help.png" />
+									<p:tooltip for="brnHelp">
+										<p:outputLabel escape="false" value="#{mec.ayuda}" />
+
+									</p:tooltip>
+								</f:facet>
+								<p:rowEditor  rendered="#{dilIndicadorMB.validarVigencia()}" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+				</p:accordionPanel>
+			</p:tab>
+
+		</p:tabView>
+		<!-- -->
+		<!-- PARA INDICADORWES DE OTRAS DEPENDENCIAS -->
+		<!-- -->
+		<p:growl id="msgE" showDetail="true" />
+		<p:tabView id="tabmecanismosOD" var="mec"
+			rendered="#{diligenciamientoMB.esDirDependencia}"
+			value="#{dilIndicadorMB.cargarMecanismosOd()}">
+			<p:tab title="#{mec.descripcion}">
+				<p:accordionPanel id="accFactoresOD" var="gru"
+					value="#{dilIndicadorMB.cargarFactoresOd(mec)}">
+					<p:tab title="#{gru.nombre}">
+						<p:dataTable id="dataTableTE" var="ind"
+							value="#{dilIndicadorMB.cargarIndicadoresOd(gru,mec)}"
+							rowKey="#{ind.oid}" rowIndexVar="rowIndex" editable="true"
+							rowStyleClass="#{ind.lectura le 0 ? 'old' : null}"
+							emptyMessage="#{comun['page.table.list.sin.resultados']}">
+
+							<p:ajax event="rowEdit" listener="#{dilIndicadorMB.onRowEditOd}" />
+							<p:ajax event="rowEditCancel"
+								listener="#{dilIndicadorMB.onRowCancelOd}" />
+
+							<p:column style="width:2.5%;text-align:center">
+								<f:facet name="header">
+									<p:outputLabel value="#{comun['lbl.numeral']}" />
+								</f:facet>
+								<p:outputLabel value="#{rowIndex+1}" styleClass="textTable" />
+							</p:column>
+							<p:column headerText="#{autoevaluacion['lbl.lectura.indicador']}"
+								style="width:5%">
+								<p:outputLabel
+									value="#{ind.tblautIndicadoresCaracteristica.indicador}" />
+							</p:column>
+							<p:column
+								headerText="#{autoevaluacion['lbl.lectura.descripcion']}"
+								style="width:80%;">
+								<p:outputLabel
+									value="#{ind.tblautIndicadoresCaracteristica.resumen}" />
+							</p:column>
+							<p:column headerText="#{autoevaluacion['lbl.lectura.medicion']}"
+								rendered="#{mec.codigo == 'D'}" style="width:5%">
+								<p:cellEditor>
+									<f:facet name="output">
+										<p:outputLabel value="#{ind.lectura}" />
+									</f:facet>
+									<f:facet name="input">
+										<h:selectOneMenu value="#{dilIndicadorMB.lectura}"
+											style="width:90%">
+											<f:selectItem itemLabel="    5    " itemValue="5" />
+											<f:selectItem itemLabel="    4    " itemValue="4" />
+											<f:selectItem itemLabel="    3    " itemValue="3" />
+											<f:selectItem itemLabel="    2    " itemValue="2" />
+											<f:selectItem itemLabel="    1    " itemValue="1" />
+										</h:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+
+							</p:column>
+							<p:column headerText="#{autoevaluacion['lbl.lectura.medicion']}"
+								rendered="#{mec.codigo == 'N'}" style="width:5%">
+								<p:cellEditor>
+									<f:facet name="output">
+										<p:outputLabel value="#{ind.lectura}" />
+									</f:facet>
+									<f:facet name="input">
+										<h:selectOneMenu value="#{dilIndicadorMB.lectura}"
+											style="width:90%">
+											<f:selectItem itemLabel="    5    " itemValue="5" />
+											<f:selectItem itemLabel="    4    " itemValue="4" />
+											<f:selectItem itemLabel="    3    " itemValue="3" />
+											<f:selectItem itemLabel="    2    " itemValue="2" />
+											<f:selectItem itemLabel="    1    " itemValue="1" />
+
+										</h:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+
+							</p:column>
+							<p:column headerText="#{autoevaluacion['lbl.lectura.medicion']}"
+								rendered="#{mec.codigo == 'T'}" style="width:5%">
+								<p:cellEditor>
+									<f:facet name="output">
+										<p:outputLabel value="#{ind.lectura}" />
+									</f:facet>
+									<f:facet name="input">
+										<h:selectOneMenu value="#{dilIndicadorMB.lectura}"
+											style="width:90%">
+											<f:selectItem itemLabel="    5    " itemValue="5" />
+											<f:selectItem itemLabel="    4    " itemValue="4" />
+											<f:selectItem itemLabel="    3    " itemValue="3" />
+											<f:selectItem itemLabel="    2    " itemValue="2" />
+											<f:selectItem itemLabel="    1    " itemValue="1" />
+										</h:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column style="width:5%">
+								<f:facet name="header">
+									<p:graphicImage width="16" id="brnHelp" style="cursor:pointer;"
+										alt="#{comun['btn.cargar.indicadores']}"
+										url="${requestContexteath}/resources/images/help.png" />
+									<p:tooltip for="brnHelp">
+										<p:outputLabel escape="false" value="#{mec.ayuda}" />
+
+									</p:tooltip>
+								</f:facet>
+								<p:rowEditor rendered="#{dilIndicadorMB.validarVigencia()}" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+				</p:accordionPanel>
+			</p:tab>
+		</p:tabView>
+	</p:outputPanel>
+</h:body>
+</html>

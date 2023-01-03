@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:form id="formFechas">
+
+	<p:dataTable id="dataTableFechas" value="#{fechasMB.listaProgramacion}"
+		filteredValue="#{fechasMB.listaProgramacionFilter}" var="te"
+		selection="#{fechasMB.selected}" rowKey="#{te.oid}"
+		rowIndexVar="rowIndex" widgetVar="dtTable"
+		paginatorAlwaysVisible="false" selectionMode="single"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		paginator="true" paginatorPosition="bottom" rows="10"
+		emptyMessage="#{comun['page.table.list.sin.resultados']}"
+		rowsPerPageTemplate="5,10,15,20,30,40,50,100">
+		<p:column style="width:16px;text-align:center">
+			<f:facet name="header">
+					#{comun['lbl.numeral']}
+					</f:facet>
+			<p:outputLabel value="#{rowIndex+1}" styleClass="textTable" />
+		</p:column>
+		<p:ajax event="rowSelect" listener="#{fechasMB.onRowSelect()}" />
+
+		<p:column>
+			<f:facet name="header">
+				<p:outputLabel value="#{encuestas['lbl.confEncuestas.encuesta']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="teModulo"
+				value="#{te.tblencTipoEvaluacion.nombre}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<p:outputLabel
+					value="#{encuestas['lbl.confEncuestas.fechas.configurada.para']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="sedesprogramas"
+				value="#{encuestas['lbl.confEncuestas.fechas.sede.programa']} (#{fechasMB.contar(te)})" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<p:outputLabel
+					value="#{encuestas['lbl.confEncuestas.fechas.fecha.creacion']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="fechaCreacion" value="#{te.fechaCreacion}" />
+		</p:column>
+		<p:column filterBy="#{te.tblacaPeriodo.descripcion}"
+			filterMatchMode="in">
+			<f:facet name="filter">
+				<p:selectCheckboxMenu
+					label="#{encuestas['lbl.confEncuestas.fechas.periodo']}"
+					onchange="PF('dtTable').filter()" panelStyle="width:155px"
+					scrollHeight="150">
+					<f:selectItems value="#{fechasMB.listaPeriodosFilter}" var="var"
+						itemValue="#{var.descripcion}" itemLabel="#{var.descripcion}" />
+				</p:selectCheckboxMenu>
+			</f:facet>
+			<p:outputLabel id="periodo" value="#{te.tblacaPeriodo.descripcion}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<p:outputLabel
+					value="#{encuestas['lbl.confEncuestas.fechas.fecha.creacion']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="fechaDesde" value="#{te.desde}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<p:outputLabel
+					value="#{encuestas['lbl.confEncuestas.fechas.fecha.creacion']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="fechahasta" value="#{te.hasta}" />
+		</p:column>
+		<p:column headerText="#{encuestas['lbl.confEncuestas.estado']}"
+			style="font-weight:bold; width:8%; text-align:center"
+			filterMatchMode="exact" filterBy="#{te.estado}">
+			<f:facet name="filter">
+				<p:selectOneMenu onchange="PF('dtTable').filter()">
+					<f:selectItem itemLabel="#{comun['lbl.estado.todos']}"
+						itemValue="#{null}" noSelectionOption="true" />
+					<f:selectItem itemLabel="#{comun['lbl.estado.activo']}"
+						itemValue="1" />
+					<f:selectItem itemLabel="#{comun['lbl.estado.inactivo']}"
+						itemValue="0" />
+				</p:selectOneMenu>
+			</f:facet>
+
+			<p:commandButton id="btnteEstadoA" rendered="#{te.estado==1}"
+				actionListener="#{fechasMB.cambiarEstado()}" icon="ui-icon-check"
+				title="#{comun['tit.estado.activo']} - #{comun['tit.estado.clic.cambiar']}">
+				<f:setPropertyActionListener target="#{fechasMB.selected}"
+					value="#{te}" />
+			</p:commandButton>
+			<p:commandButton id="btnteEstadoI" rendered="#{te.estado==0}"
+				actionListener="#{fechasMB.cambiarEstado()}" icon="ui-icon-close"
+				title="#{comun['tit.estado.inactivo']} - #{comun['tit.estado.clic.cambiar']}">
+				<f:setPropertyActionListener target="#{fechasMB.selected}"
+					value="#{te}" />
+			</p:commandButton>
+
+		</p:column>
+	</p:dataTable>
+</h:form>
+</html>

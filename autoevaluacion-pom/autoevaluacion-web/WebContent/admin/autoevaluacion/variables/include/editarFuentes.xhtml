@@ -1,0 +1,47 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<h:form id="updateDetailForm">
+		<p:outputPanel>
+
+			<p:panelGrid id="display" columns="3" cellpadding="4"
+				style="width:100%; margin:0 auto;">
+
+				<h:outputLabel for="nombre"
+					value="#{autoevaluacion['lbl.fuente.nombre']} #{comun['lbl.obligatorio']}" />
+				<p:inputTextarea id="nombre" value="#{fuentesMB.selected.nombre}"
+					required="true" maxlength="200" 
+					label="#{autoevaluacion['lbl.fuente.nombre']} "
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}">
+					<p:ajax update="nombreMsg" event="keyup" onstart="true" />
+				</p:inputTextarea>
+				<p:message for="nombre" id="nombreMsg" display="icon" />
+
+
+				<f:facet name="footer">
+					<p:commandLink id="cmlGuardarEditar"
+						update="display :formteba :pnlP"
+						actionListener="#{fuentesMB.editar()}">
+						<p:graphicImage id="btnE" title="#{comun['btn.guardar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/save_f2.png" />
+					</p:commandLink>
+					<p:commandLink id="cmlCancelar" immediate="true"
+						update="display :formteba :pnlP"
+						actionListener="#{fuentesMB.lanzarEditar(false)}">
+						<p:graphicImage id="btnC" title="#{comun['btn.cancelar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/cancel_f2.png" />
+					</p:commandLink>
+
+				</f:facet>
+			</p:panelGrid>
+
+		</p:outputPanel>
+	</h:form>
+</h:body>
+</html>

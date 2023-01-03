@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/facelets/templates/template.xhtml">
+
+	<ui:define name="titleMenu"> 
+Tipo Pregunta
+</ui:define>
+	<ui:define name="barraAcciones">
+		<h:form id="formTPba">
+			<p:outputPanel id="outPnl" style="floal:right;">
+				<!-- <p:toolbar> 
+					<f:facet name="right"> -->
+				<p:commandLink onclick="history.back();"
+					rendered="#{tipoPregunta.acRegresar}"
+					actionListener="#{tipoPregunta.inicializar()}">
+					<p:graphicImage id="btnR" styleClass="imgsBA"
+						title="#{comun['btn.regresar']}" alt="#{comun['btn.regresar']}"
+						url="${requestContextPath}/resources/images/back_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="cmlCrear" rendered="#{tipoPregunta.acCrear}"
+					actionListener="#{tipoPregunta.lanzarCrear(true)}">
+					<p:graphicImage id="btnN" title="#{comun['btn.nuevo']}"
+						styleClass="imgsBA" alt="#{comun['btn.nuevo']}"
+						url="${requestContextPath}/resources/images/new_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="cmlEditar" rendered="#{tipoPregunta.acEditar}"
+					actionListener="#{tipoPregunta.lanzarEditar(true)}">
+					<p:graphicImage id="btnE" title="#{comun['btn.editar']}"
+						styleClass="imgsBA" alt="#{comun['btn.editar']}"
+						url="${requestContextPath}/resources/images/edit_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="btnDell" rendered="#{tipoPregunta.acEliminar}"
+					actionListener="#{tipoPregunta.eliminar()}">
+					<p:graphicImage id="btnEl" title="#{comun['btn.eliminar']}"
+						styleClass="imgsBA" alt="#{comun['btn.eliminar']}"
+						url="${requestContextPath}/resources/images/trash_f2.png" />
+					<p:confirm header="Confirmation"
+						message="#{comun['global.msg.lbl.confirm']}" icon="ui-icon-alert" />
+				</p:commandLink>
+				<!--	</f:facet>
+				  </p:toolbar> -->
+			</p:outputPanel>
+		</h:form>
+	</ui:define>
+	<ui:define name="contenido">
+		<h:form id="formTP">
+			<p:panel id="pnlP">
+				<p:dataTable id="dataTable" value="#{tipoPregunta.listaTipoAspecto}"
+					filteredValue="#{tipoPregunta.listaTipoAspectoFilter}" var="tp"
+					selection="#{tipoPregunta.selected}" selectionMode="single"
+					rowKey="#{tp.oid}" rowIndexVar="rowIndex" widgetVar="dtTable"
+					paginatorAlwaysVisible="false"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					paginator="true" paginatorPosition="bottom" rows="10"
+					emptyMessage="#{comun['page.table.list.sin.resultados']}"
+					rowsPerPageTemplate="5,10,15,20,30,40,50,100">
+					<p:column style="width:16px;text-align:center">
+						<f:facet name="header">
+					#{comun['lbl.numeral']}
+					</f:facet>
+						<p:outputLabel value="#{rowIndex+1}" styleClass="textTable" />
+					</p:column>
+					<p:ajax event="rowSelect" listener="#{tipoPregunta.onRowSelect()}"  />
+					<!-- <p:column selectionMode="single" 
+						style="width:16px;text-align:center" />-->
+					<p:column filterBy="#{tp.nombre}" filterMatchMode="contains">
+						<f:facet name="header">
+							<p:outputLabel value="#{encuestas['lbl.tipoPregunta.nombre']}"
+								styleClass="textTable" />
+
+						</f:facet>
+						<p:outputLabel id="tpNombre" value="#{tp.nombre}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<p:outputLabel
+								value="#{encuestas['lbl.tipoPregunta.descripcion']}"
+								style="font-size" />
+						</f:facet>
+						<p:outputLabel id="tpDescripcion" value="#{tp.descripcion}" />
+					</p:column>
+					<p:column headerText="#{encuestas['lbl.tipoPregunta.estado']}"
+						style="font-weight:bold; width:8%; text-align:center"
+						filterMatchMode="exact" filterBy="#{tp.estado}">
+						<f:facet name="filter">
+							<p:selectOneMenu onchange="PF('dtTable').filter()">
+								<f:selectItem itemLabel="#{comun['lbl.estado.todos']}"
+									itemValue="#{null}" noSelectionOption="true" />
+								<f:selectItem itemLabel="#{comun['lbl.estado.activo']}"
+									itemValue="1" />
+								<f:selectItem itemLabel="#{comun['lbl.estado.inactivo']}"
+									itemValue="0" />
+							</p:selectOneMenu>
+						</f:facet>
+						<p:commandButton id="btnTpEstadoA" rendered="#{tp.estado==1}"
+							actionListener="#{tipoPregunta.cambiarEstado()}"
+							icon="ui-icon-check" update=":formTP:dataTable"
+							title="#{comun['tit.estado.activo']} - #{comun['tit.estado.clic.cambiar']}">
+							<f:setPropertyActionListener target="#{tipoPregunta.selected}"
+								value="#{tp}" />
+						</p:commandButton>
+						<p:commandButton id="btnTpEstadoI" rendered="#{tp.estado==0}"
+							actionListener="#{tipoPregunta.cambiarEstado()}"
+							icon="ui-icon-close" update=":formTP:dataTable"
+							title="#{comun['tit.estado.inactivo']} - #{comun['tit.estado.clic.cambiar']}">
+							<f:setPropertyActionListener target="#{tipoPregunta.selected}"
+								value="#{tp}" />
+						</p:commandButton>
+
+					</p:column>
+				</p:dataTable>
+				<br />
+			</p:panel>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+				header="#{comun['pnl.confirmacion']}">
+				<p:commandButton value="#{comun['btn.confirm.yes']}" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="#{comun['btn.confirm.not']}" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+		<p:dialog id="dlgNuevo" widgetVar="dlgNew" modal="true"
+			header="#{encuestas['header.crear.tipo.pregunta']}" closable="false"
+			visible="#{tipoPregunta.crear}" resizable="false">
+			<ui:include src="/admin/encuestas/tipoPreguntas/includes/crear.xhtml" />
+		</p:dialog>
+		<p:dialog id="dlgEditar" widgetVar="dlgEdit" modal="true"
+			header="#{encuestas['header.editar.tipo.pregunta']}" closable="false"
+			visible="#{tipoPregunta.editar}" resizable="false">
+			<ui:include src="/admin/encuestas/tipoPreguntas/includes/editar.xhtml" />
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

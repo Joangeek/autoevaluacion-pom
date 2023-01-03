@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<p:dataTable id="dataTableverResEncA"
+		value="#{informesAutoevalMB.listaReporteRealizados}" var="te"
+		rendered="#{informesAutoevalMB.mostrarDatos}"
+		paginatorPosition="bottom" rowIndexVar="rowIndex" widgetVar="dtTable"
+		paginatorAlwaysVisible="false"
+		emptyMessage="#{comun['page.table.list.sin.resultados']}"
+		paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+		paginator="true" rows="20">
+		<p:column style="width:4%;text-align:center">
+			<f:facet name="header">
+					#
+					</f:facet>
+			<p:outputLabel value="#{rowIndex+1}" styleClass="textTable" />
+		</p:column>
+		<p:column headerText="Persona" style="width:23%;"
+			rendered="#{!informesAutoevalMB.esEmpelador}">
+			<p:outputLabel value="#{te.persona}" />
+		</p:column>
+		<p:column headerText="Entidad" style="width:23%;"
+			rendered="#{informesAutoevalMB.esEmpelador}">
+			<p:outputLabel value="#{te.persona}" />
+		</p:column>
+		<p:column headerText="Identificación" style="width:8%;"
+			rendered="#{!informesAutoevalMB.esEmpelador}">
+			<p:outputLabel value="#{te.identificacion}" />
+		</p:column>
+		<p:column headerText="Nit" style="width:11%;"
+			rendered="#{informesAutoevalMB.esEmpelador}">
+			<p:outputLabel value="#{te.identificacion}" />
+		</p:column>
+		<p:column headerText="Teléfono" style="width:10%;">
+			<p:outputLabel value="#{te.celular}" />
+		</p:column>
+		<p:column headerText="Email" style="width:18%;">
+			<p:outputLabel value="#{te.email}" />
+		</p:column>
+		<p:column headerText="Sede" style="width:18%;">
+			<p:outputLabel value="#{te.sede}" />
+		</p:column>
+		<p:column headerText="Programa" style="width:25%;" rendered="#{!informesAutoevalMB.esDocenteAdminDire}">
+			<p:outputLabel value="#{te.programa}" />
+		</p:column>
+		
+		<p:column headerText="Fecha realización" style="width:14%;">
+			<p:outputLabel value="#{te.fecha}" />
+		</p:column>
+	</p:dataTable>
+	<p:commandButton id="btn_descargarXLS" value="Xls" ajax="false"
+		immediate="true" style="display:none;" process="@this">
+		<p:dataExporter type="xls" target="dataTableverResEncA"
+			fileName="#{informesAutoevalMB.selected.nombre}" />
+	</p:commandButton>
+	<p:commandButton id="btn_descargarPDF" value="Pdf" ajax="false"
+		immediate="true" style="display:none;">
+		<p:dataExporter type="pdf" target="dataTableverResEncA"
+			fileName="#{informesAutoevalMB.selected.nombre}" />
+	</p:commandButton>
+</h:body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:form id="formte">
+
+	<p:dataTable id="dataTable" value="#{confIndiMB.listado}"
+		rendered="#{confIndiMB.mostrarConfigurados}"
+		filteredValue="#{confIndiMB.listadoFilter}" rowKey="#{te.oid}"
+		rowIndexVar="rowIndex" var="te" widgetVar="dtTable"
+		paginatorAlwaysVisible="false"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		paginator="true" paginatorPosition="bottom" rows="5"
+		emptyMessage="#{comun['page.table.list.sin.resultados']}"
+		rowsPerPageTemplate="5,10,15,20,30,40,50,100,200,400,800">
+		<f:facet name="header">
+			<p:outputLabel
+				value="#{autoevaluacion['header.configuracion.listado.indicadores']}" />
+
+			<p:graphicImage width="24" style="visibility:hidden"
+				title="#{comun['btn.exportar.pdf']}"
+				alt="#{comun['btn.exportar.pdf']}"
+				url="${requestContexteath}/resources/images/pdf.png" />
+
+			<p:commandLink style="float:right;" ajax="false" immediate="true"
+				process="@this">
+				<p:graphicImage id="btnPdf" width="24"
+					title="#{comun['btn.exportar.pdf']}"
+					alt="#{comun['btn.exportar.pdf']}"
+					url="${requestContexteath}/resources/images/pdf.png" />
+				<p:dataExporter target="dataTable" type="pdf" fileName="tabla" />
+			</p:commandLink>
+			<p:commandLink style="float:right;" ajax="false" immediate="true"
+				process="@this">
+				<p:graphicImage id="btnXls" title="#{comun['btn.exportar.xls']}"
+					alt="#{comun['btn.exportar.xls']}" width="24"
+					url="${requestContexteath}/resources/images/excel.png" />
+				<p:dataExporter target="dataTable" type="xls" fileName="tabla" />
+			</p:commandLink>
+
+		</f:facet>
+
+		<p:column style="width:16px;text-align:center">
+			<p:outputLabel value="#{rowIndex+1}" styleClass="textTable" />
+		</p:column>
+
+		<p:column sortBy="#{te.tblautCaracteristica.tblautFactore.nombre}"
+			width="22%"
+			filterBy="#{te.tblautCaracteristica.tblautFactore.nombre}"
+			filterMatchMode="contains">
+			<f:facet name="header">
+				<p:outputLabel
+					value="#{autoevaluacion['lbl.indicadores.listado.factor']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="factor"
+				value="#{te.tblautCaracteristica.tblautFactore.nombre}" />
+		</p:column>
+		<p:column sortBy="#{te.tblautCaracteristica.caracteristica}"
+			width="22%" filterBy="#{te.tblautCaracteristica.caracteristica}"
+			filterMatchMode="contains">
+			<f:facet name="header">
+				<p:outputLabel
+					value="#{autoevaluacion['lbl.indicadores.listado.caracterisca']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="caracteristica"
+				value="#{te.tblautCaracteristica.caracteristica}" />
+		</p:column>
+
+
+		<p:column sortBy="#{te.indicador}" filterBy="#{te.indicador}"
+			width="11%" filterMatchMode="contains">
+			<f:facet name="header">
+				<p:outputLabel
+					value="#{autoevaluacion['lbl.indicadores.listado.codigo']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="codigo" value="#{te.indicador}" />
+		</p:column>
+		<p:column sortBy="#{te.resumen}" filterBy="#{te.resumen}"
+			filterMatchMode="contains">
+			<f:facet name="header">
+				<p:outputLabel
+					value="#{autoevaluacion['lbl.indicadores.listado.indicador']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="resumen" value="#{te.resumen}" />
+		</p:column>
+
+	</p:dataTable>
+</h:form>
+</html>

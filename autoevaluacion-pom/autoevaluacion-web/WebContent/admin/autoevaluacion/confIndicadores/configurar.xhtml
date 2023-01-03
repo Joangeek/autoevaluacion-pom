@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/facelets/templates/template.xhtml">
+
+	<ui:define name="titleMenu">
+		<p:graphicImage width="33"
+			url="${requestContexteath}/resources/images/generic.png" />
+
+		<p:outputLabel id="tituloConf" value="#{confIndiMB.titulo}" />
+	</ui:define>
+	<ui:define name="barraAcciones">
+		<h:form id="formteba">
+			<p:outputPanel id="outenl" style="floal:right;">
+
+				<p:commandLink
+					rendered="#{confIndiMB.acRegresar and !confIndiMB.mostrarConfigurados}"
+					update=":formteba :pnlP :tituloConf"
+					actionListener="#{confIndiMB.lanzarRegresar()}">
+					<p:graphicImage id="btnR" styleClass="imgsBA"
+						title="#{comun['btn.regresar']}" alt="#{comun['btn.regresar']}"
+						url="${requestContexteath}/resources/images/back_f2.png" />
+				</p:commandLink>
+
+				<p:commandLink id="cmlFactor"
+					rendered="#{confIndiMB.mostrarConfigurados}"
+					update=":formteba :pnlP :tituloConf"
+					actionListener="#{confIndiMB.cargarFactores(true)}">
+					<p:graphicImage id="btnFactor"
+						title="#{autoevaluacion['btn.condigurar.factores']}"
+						styleClass="imgsBA"
+						alt="#{autoevaluacion['btn.condigurar.factores']}"
+						url="${requestContexteath}/resources/images/config_f2.gif" />
+				</p:commandLink>
+
+				<p:commandLink id="cmlCaracteristica"
+					rendered="#{confIndiMB.mostrarFactores}"
+					update=":formteba :pnlP :tituloConf"
+					actionListener="#{confIndiMB.cargarCaracteristicas(true)}">
+					<p:graphicImage id="btnConf"
+						title="#{autoevaluacion['btn.condigurar.caracteristicas']}"
+						styleClass="imgsBA"
+						alt="#{autoevaluacion['btn.condigurar.caracteristicas']}"
+						url="${requestContexteath}/resources/images/aspec_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="cmlIndicadores"
+					rendered="#{confIndiMB.mostrarCaracteristicas}"
+					update=":formteba :pnlP :tituloConf"
+					actionListener="#{confIndiMB.cargarIndicadores(true)}">
+					<p:graphicImage id="btnAspe"
+						title="#{autoevaluacion['btn.condigurar.indiadores']}"
+						styleClass="imgsBA"
+						alt="#{autoevaluacion['btn.condigurar.indiadores']}"
+						url="${requestContexteath}/resources/images/aspec_f2.png" />
+				</p:commandLink>
+
+
+				<p:commandLink id="cmlCrear"
+					rendered="#{confIndiMB.acCrear and !confIndiMB.mostrarConfigurados}"
+					update=":formteba :pnlP "
+					actionListener="#{confIndiMB.lanzarCrear(true)}">
+					<p:graphicImage id="btnN" title="#{comun['btn.nuevo']}"
+						styleClass="imgsBA" alt="#{comun['btn.nuevo']}"
+						url="${requestContexteath}/resources/images/new_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="cmlEditar"
+					rendered="#{confIndiMB.acEditar and !confIndiMB.mostrarConfigurados}"
+					update=":formteba :pnlP "
+					actionListener="#{confIndiMB.lanzarEditar(true)}">
+					<p:graphicImage id="btnE" title="#{comun['btn.editar']}"
+						styleClass="imgsBA" alt="#{comun['btn.editar']}"
+						url="${requestContexteath}/resources/images/edit_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="btnDell"
+					rendered="#{confIndiMB.acEliminar and !confIndiMB.mostrarConfigurados}"
+					update=":formteba :pnlP "
+					actionListener="#{confIndiMB.lanzarEliminar()}">
+					<p:graphicImage id="btnEl" title="#{comun['btn.eliminar']}"
+						styleClass="imgsBA" alt="#{comun['btn.eliminar']}"
+						url="${requestContexteath}/resources/images/trash_f2.png" />
+					<p:confirm header="Confirmation"
+						message="#{comun['global.msg.lbl.confirm']}" icon="ui-icon-alert" />
+				</p:commandLink>
+			</p:outputPanel>
+		</h:form>
+	</ui:define>
+	<ui:define name="contenido">
+		<p:panel id="pnlP">
+			<p:outputPanel id="pnlConf"
+				rendered="#{confIndiMB.mostrarConfigurados}">
+				<ui:include
+					src="/admin/autoevaluacion/confIndicadores/listado.xhtml" />
+			</p:outputPanel>
+
+			<p:outputPanel id="pnlFactor"
+				rendered="#{confIndiMB.mostrarFactores}">
+				<ui:include
+					src="/admin/autoevaluacion/confIndicadores/factores.xhtml" />
+			</p:outputPanel>
+			<p:outputPanel id="pnlCaracteristica"
+				rendered="#{confIndiMB.mostrarCaracteristicas}">
+				<ui:include
+					src="/admin/autoevaluacion/confIndicadores/caracteristica.xhtml" />
+			</p:outputPanel>
+			<p:outputPanel id="pnlIndicador"
+				rendered="#{confIndiMB.mostrarIndicadores}">
+				<ui:include
+					src="/admin/autoevaluacion/confIndicadores/indicadores.xhtml" />
+			</p:outputPanel>
+
+
+
+			<!-- Includes de Caracteristicas -->
+		<p:dialog id="dlgNuevaCaracteristica" widgetVar="dlgNewTE" modal="true"
+				header="#{autoevaluacion['header.factor.crear.caracteristica']}"
+				closable="false" visible="#{caracteristicasMB.crear}" resizable="false">
+				<ui:include
+					src="/admin/autoevaluacion/confIndicadores/include/crearCaracteristica.xhtml" />
+			</p:dialog>
+			<p:dialog id="dlgEditarCaracteristica" widgetVar="dlgEditTE" modal="true"
+				header="#{autoevaluacion['header.factor.editar.caracteristica']}"
+				closable="false" visible="#{caracteristicasMB.editar}" resizable="false">
+				<ui:include
+					src="/admin/autoevaluacion/confIndicadores/include/editarCaracteristica.xhtml" />
+			</p:dialog> 
+
+			<!-- Includes de factores -->
+			<p:dialog id="dlgNuevoFactor" modal="true"
+				header="#{autoevaluacion['header.factor.crear.factor']}"
+				closable="false" visible="#{factoresMB.crear}" resizable="false">
+				<ui:include
+					src="/admin/autoevaluacion/confIndicadores/include/crearFactor.xhtml" />
+			</p:dialog>
+			<p:dialog id="dlgEditarFactor" modal="true"
+				header="#{autoevaluacion['header.factor.editar.factor']}"
+				closable="false" visible="#{factoresMB.editar}" resizable="false">
+				<ui:include
+					src="/admin/autoevaluacion/confIndicadores/include/editarFactor.xhtml" />
+			</p:dialog>
+			<!-- Includes de Aspecto -->
+			<p:dialog id="dlgNuevoIndicador" modal="true"
+				header="#{autoevaluacion['header.factor.crear.indicador']}" closable="false"
+				visible="#{indicadoresMB.crear}" resizable="false">
+				<ui:include
+					src="/admin/autoevaluacion/confIndicadores/include/crearIndicador.xhtml" />
+			</p:dialog>
+			<p:dialog id="dlgEditarIndicador" modal="true"
+				header="#{autoevaluacion['header.factor.editar.indicador']}" closable="false"
+				visible="#{indicadoresMB.editar}" resizable="false">
+				<ui:include
+					src="/admin/autoevaluacion/confIndicadores/include/editarIndicador.xhtml" />
+			</p:dialog>  
+
+
+			<!-- Confirmacion -->
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+				header="#{comun['pnl.confirmacion']}">
+				<p:commandButton value="#{comun['btn.confirm.yes']}" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="#{comun['btn.confirm.not']}" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

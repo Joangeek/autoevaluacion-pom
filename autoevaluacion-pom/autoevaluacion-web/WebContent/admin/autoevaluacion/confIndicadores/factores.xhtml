@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:form id="formFactores">
+
+	<p:dataTable id="dataTableFactor" value="#{factoresMB.listaFactores}"
+		filteredValue="#{factoresMB.listaFactoresFilter}" var="te"
+		selection="#{factoresMB.selected}" selectionMode="single"
+		rowKey="#{te.oid}" rowIndexVar="rowIndex" widgetVar="dtTable"
+		paginatorAlwaysVisible="false"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		paginator="true" paginatorPosition="bottom" rows="10"
+		emptyMessage="#{comun['page.table.list.sin.resultados']}"
+		rowsPerPageTemplate="5,10,15,20,30,40,50,100">
+		<p:column style="width:16px;text-align:center">
+			<f:facet name="header">
+					#{comun['lbl.numeral']}
+					</f:facet>
+			<p:outputLabel value="#{rowIndex+1}" styleClass="textTable" />
+		</p:column>
+		<p:ajax event="rowSelect" listener="#{factoresMB.onRowSelect()}" />
+		<!-- <p:column selectionMode="single" 
+						style="width:16px;text-align:center" />-->
+		<p:column sortBy="#{te.nombre}" filterBy="#{te.nombre}"
+			filterMatchMode="contains">
+			<f:facet name="header">
+				<p:outputLabel value="#{autoevaluacion['lbl.factor.nombre']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="nombre" value="#{te.nombre}" />
+		</p:column>
+		<p:column sortBy="#{te.orden}" filterBy="#{te.orden}"
+			filterMatchMode="contains">
+			<f:facet name="header">
+				<p:outputLabel value="#{autoevaluacion['lbl.factor.orden']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="orden" value="#{te.orden}" />
+		</p:column>
+
+		<p:column sortBy="#{te.estado}"
+			headerText="#{autoevaluacion['lbl.factor.estado']}"
+			style="font-weight:bold; width:8%; text-align:center"
+			filterMatchMode="exact" filterBy="#{te.estado}">
+			<f:facet name="filter">
+				<p:selectOneMenu onchange="PF('dtTable').filter()">
+					<f:selectItem itemLabel="#{comun['lbl.estado.todos']}"
+						itemValue="#{null}" noSelectionOption="true" />
+					<f:selectItem itemLabel="#{comun['lbl.estado.activo']}"
+						itemValue="1" />
+					<f:selectItem itemLabel="#{comun['lbl.estado.inactivo']}"
+						itemValue="0" />
+				</p:selectOneMenu>
+			</f:facet>
+			<!-- update=":formte:dataTableTE" -->
+			<p:commandButton id="btnteEstadoA" rendered="#{te.estado==1}"
+				update="dataTableFactor"
+				actionListener="#{factoresMB.cambiarEstado()}" icon="ui-icon-check"
+				title="#{comun['tit.estado.activo']} - #{comun['tit.estado.clic.cambiar']}">
+				<f:setPropertyActionListener target="#{factoresMB.selected}"
+					value="#{te}" />
+				<p:confirm header="Confirmation"
+					message="#{autoevaluacion['msg.lbl.confirm.update.estados.factor.hijos']}"
+					icon="ui-icon-alert" />
+			</p:commandButton>
+			<p:commandButton id="btnteEstadoI" rendered="#{te.estado==0}"
+				update="dataTableFactor"
+				actionListener="#{factoresMB.cambiarEstado()}" icon="ui-icon-close"
+				title="#{comun['tit.estado.inactivo']} - #{comun['tit.estado.clic.cambiar']}">
+				<f:setPropertyActionListener target="#{factoresMB.selected}"
+					value="#{te}" />
+				<p:confirm header="Confirmation"
+					message="#{autoevaluacion['msg.lbl.confirm.update.estados.factor.hijos']}"
+					icon="ui-icon-alert" />
+			</p:commandButton>
+
+		</p:column>
+	</p:dataTable>
+</h:form>
+</html>

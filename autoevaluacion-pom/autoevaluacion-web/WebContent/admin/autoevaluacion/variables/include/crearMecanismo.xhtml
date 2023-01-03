@@ -1,0 +1,70 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<h:form id="newDetailForm">
+		<p:outputPanel>
+			<p:panelGrid id="display" columns="3" cellpadding="4"
+				style="width:100%; margin:0 auto;">
+
+				<h:outputLabel for="descripcion"
+					value="#{autoevaluacion['lbl.mecanismo.descripcion']} #{comun['lbl.obligatorio']}" />
+				<p:inputText id="descripcion"
+					value="#{mecanismosMB.mecanismo.descripcion}"
+					style="text-transform:uppercase;"
+					onkeyup="javascript:this.value=this.value.toUpperCase();"
+					required="true" maxlength="200"
+					label="#{autoevaluacion['lbl.mecanismo.descripcion']} "
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}">
+					<p:ajax update="descripcionMsg" event="keyup" onstart="true" />
+				</p:inputText>
+				<p:message for="descripcion" id="descripcionMsg" display="icon" />
+				<h:outputLabel
+					value="#{autoevaluacion['lbl.mecanismo.codigo']} #{comun['lbl.obligatorio']}" />
+				<p:inputText id="codigo" value="#{mecanismosMB.mecanismo.codigo}"
+					required="true" maxlength="2"
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}"
+					style="text-transform:uppercase;"
+					onkeyup="javascript:this.value=this.value.toUpperCase();"
+					label="#{autoevaluacion['lbl.mecanismo.codigo']}">
+					<p:ajax update="codigoMsgMsg" event="keyup" onstart="true" />
+					<p:ajax process="@this" event="valueChange" listener="#{mecanismosMB.validarCodigo()}" />
+				</p:inputText>
+				<p:message for="codigo" id="codigoMsgMsg" display="icon" />
+				<h:outputLabel value="#{autoevaluacion['lbl.mecanismo.ayuda']}" />
+				<p:editor id="ayuda" width="650" value="#{mecanismosMB.mecanismo.ayuda}" />
+
+				<f:facet name="footer">
+					<p:commandLink id="cmlGuardarEditar"
+						update="display :formteba :pnlP"
+						actionListener="#{mecanismosMB.crear()}">
+						<p:graphicImage id="btnE" title="#{comun['btn.guardar']}"
+							styleClass="imgsBA" alt="#{comun['btn.guardar']}"
+							url="${requestContextPath}/resources/images/save_f2.png" />
+					</p:commandLink>
+					<p:commandLink id="cmlLimpiar" immediate="true" update="display"
+						process="@this" actionListener="#{mecanismosMB.lanzarCrear(true)}">
+						<p:graphicImage id="btnL" title="#{comun['btn.limpiar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/clear_f2.png" />
+						<p:resetInput target="display" />
+					</p:commandLink>
+					<p:commandLink id="cmlCancelar" immediate="true"
+						style="float:right;"
+						update="display :newDetailForm :pnlP :dlgNuevo"
+						actionListener="#{mecanismosMB.lanzarCrear(false)}">
+						<p:graphicImage id="btnC" title="#{comun['btn.cancelar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/cancel_f2.png" />
+						<p:resetInput target="display" />
+					</p:commandLink>
+				</f:facet>
+			</p:panelGrid>
+
+		</p:outputPanel>
+	</h:form>
+</h:body>
+</html>

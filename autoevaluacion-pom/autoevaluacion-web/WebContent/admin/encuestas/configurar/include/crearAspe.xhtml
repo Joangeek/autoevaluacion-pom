@@ -1,0 +1,101 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<h:form id="newDetailFormAspect">
+		<p:outputPanel>
+
+			<p:panelGrid id="display" columns="3" cellpadding="4"
+				style="width:100%; margin:0 auto;">
+
+				<h:outputLabel for="nombreASP"
+					value="#{encuestas['lbl.confEncuestas.pregunta']} #{comun['lbl.obligatorio']}" />
+				<p:inputTextarea id="nombreASP"
+					value="#{aspectoMB.aspecto.descripcion}"
+					style="text-transform:uppercase;"
+					onkeyup="javascript:this.value=this.value.toUpperCase();"
+					required="true" label="#{encuestas['lbl.confEncuestas.pregunta']}"
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}">
+					<p:ajax update="msgnombreETP" event="keyup" onstart="true" />
+				</p:inputTextarea>
+				<p:message for="nombreASP" id="msgnombreETP" display="icon" />
+				<h:outputLabel for="ordenGRA"
+					value="#{encuestas['lbl.confEncuestas.orden']} #{comun['lbl.obligatorio']}" />
+				<p:spinner id="ordenASP" min="1" max="15"
+					value="#{aspectoMB.aspecto.orden}" required="true"
+					label="#{encuestas['lbl.confEncuestas.orden']}">
+					<p:ajax update="msgordenASP" event="keyup" onstart="true" />
+				</p:spinner>
+				<p:message for="ordenASP" id="msgordenASP" display="icon" />
+				<h:outputLabel for="dirigidoA"
+					value="#{encuestas['lbl.confEncuestas.tipo.pregunta']} #{comun['lbl.obligatorio']}" />
+				<p:selectOneMenu id="tipoPreguntASP" required="true"
+					label="#{encuestas['lbl.confEncuestas.tipo.pregunta']}"
+					requiredMessage="#{comun['global.msg.seleccionar.item']}"
+					value="#{aspectoMB.aspecto.tblencTipoAspecto}" style="width:125px">
+					<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+					<f:selectItems value="#{aspectoMB.listaTipoAspecto}" var="var"
+						itemLabel="#{var.nombre}" />
+					<f:converter converterId="GenericConvertEntity" />
+					<p:ajax update="msgtipoPreguintaASP" event="valueChange"
+						onstart="true" />
+				</p:selectOneMenu>
+				<p:message for="tipoPreguntASP" id="msgtipoPreguintaASP"
+					display="icon" />
+				<h:outputLabel for="codigoASP"
+					value="#{encuestas['lbl.confEncuestas.codigo']} #{comun['lbl.obligatorio']}" />
+				<p:inputText id="codigoASP" value="#{aspectoMB.aspecto.codigo}"
+					style="text-transform:uppercase;"
+					onkeyup="javascript:this.value=this.value.toUpperCase();"
+					required="true" label="#{encuestas['lbl.confEncuestas.codigo']}"
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}">
+					<p:ajax update="msgCodigoASp" event="keyup" onstart="true" />
+					<f:validateLength minimum="1" maximum="5" />
+				</p:inputText>
+				<p:message for="codigoASP" id="msgCodigoASp" display="icon" />
+
+				<h:outputLabel for="pesoASP"
+					value="#{encuestas['lbl.confEncuestas.peso']} #{comun['lbl.obligatorio']}" />
+				<p:inputText id="pesoASP"
+					value="#{grupoAspectoMB.grupoAspecto.nombre}"
+					style="text-transform:uppercase;"
+					onkeyup="javascript:this.value=this.value.toUpperCase();"
+					required="true" label="#{encuestas['lbl.confEncuestas.codigo']}"
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}">
+					<p:ajax update="msgPesoASp" event="keyup" onstart="true" />
+					<f:validateDoubleRange minimum="0" maximum="20" />
+				</p:inputText>
+				<p:message for="pesoASP" id="msgPesoASp" display="icon" />
+
+				<f:facet name="footer">
+					<p:commandLink id="cmlGuardarEditar" update="display :formteba"
+						actionListener="#{aspectoMB.crear()}">
+						<p:graphicImage id="btnE" title="#{comun['btn.guardar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/save_f2.png" />
+					</p:commandLink>
+					<p:commandLink id="cmlLimpiar" immediate="true" update="display"
+						process="@this" actionListener="#{aspectoMB.lanzarCrear(true)}">
+						<p:graphicImage id="btnL" title="#{comun['btn.limpiar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/clear_f2.png" />
+						<p:resetInput target="display" />
+					</p:commandLink>
+					<p:commandLink id="cmlCancelar" immediate="true"
+						style="float:right;" update="display :formteba :pnlP :dlgNuevoAS"
+						actionListener="#{aspectoMB.lanzarCrear(false)}">
+						<p:graphicImage id="btnC" title="#{comun['btn.cancelar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/cancel_f2.png" />
+						<p:resetInput target="display" />
+					</p:commandLink>
+				</f:facet>
+			</p:panelGrid>
+
+		</p:outputPanel>
+	</h:form>
+</h:body>
+</html>

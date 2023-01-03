@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<h:form id="newDetailForm">
+		<p:outputPanel>
+
+			<p:panelGrid id="display" columns="3" cellpadding="4"
+				style="margin:0 auto;">
+
+				<p:outputLabel for="nombreETP"
+					value="#{encuestas['lbl.tipoPregunta.nombre']}" />
+				<p:inputText id="nombreETP"
+					value="#{tipoPregunta.tipoAspecto.nombre}"
+					style="text-transform:uppercase;"
+					onkeyup="javascript:this.value=this.value.toUpperCase();"
+					required="true"
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}">
+					<p:ajax update="msgnombreETP" event="keyup" onstart="true" />
+				</p:inputText>
+				<p:message for="nombreETP" id="msgnombreETP" display="icon" />
+				<p:outputLabel for="descripcionETP"
+					value="#{encuestas['lbl.tipoPregunta.descripcion']}" />
+				<p:inputTextarea id="descripcionETP"
+					value="#{tipoPregunta.tipoAspecto.descripcion}"
+					style="text-transform:uppercase;"
+					onkeyup="javascript:this.value=this.value.toUpperCase();"
+					required="true"
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}"
+					label="Sede">
+					<p:ajax update="msgdescripcionETP" event="keyup" onstart="true" />
+				</p:inputTextarea>
+				<p:message for="descripcionETP" id="msgdescripcionETP"
+					display="icon" />
+
+				<p:outputLabel for="estadoETP"
+					value="#{encuestas['lbl.tipoPregunta.estado']} #{comun['lbl.obligatorio']}" />
+				<p:selectOneMenu id="estadoETP"
+					value="#{tipoPregunta.tipoAspecto.estado}">
+					<f:selectItem itemValue="1"
+						itemLabel="#{comun['lbl.estado.activo']}" />
+					<f:selectItem itemValue="0"
+						itemLabel="#{comun['lbl.estado.inactivo']}" />
+				</p:selectOneMenu>
+				<p:spacer />
+				<f:facet name="footer">
+					<p:commandLink id="cmlGuardarEditar"
+						actionListener="#{tipoPregunta.crear()}">
+						<p:graphicImage id="btnE" title="#{comun['btn.guardar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/save_f2.png" />
+					</p:commandLink>
+					<p:commandLink id="cmlLimpiar" immediate="true" update="display"
+						process="@this" actionListener="#{tipoPregunta.lanzarCrear(true)}">
+						<p:graphicImage id="btnL" title="#{comun['btn.limpiar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/clear_f2.png" />
+						<p:resetInput target="display" />
+					</p:commandLink>
+					<p:commandLink id="cmlCancelar" immediate="true"
+						style="float:right;" update="display"
+						actionListener="#{tipoPregunta.lanzarCrear(false)}">
+						<p:graphicImage id="btnC" title="#{comun['btn.cancelar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/cancel_f2.png" />
+						<p:resetInput target="display" />
+					</p:commandLink>
+				</f:facet>
+			</p:panelGrid>
+
+		</p:outputPanel>
+	</h:form>
+</h:body>
+</html>

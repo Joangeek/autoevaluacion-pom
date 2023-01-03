@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link
+		href="${facesContext.externalContext.requestContextPath}/resources/css/style.css"
+		rel="stylesheet" type="text/css" />
+	<link rel="shortcut icon"
+		href="${facesContext.externalContext.requestContextPath}/resources/images/favicon.ico"
+		type="image/x-icon" />
+
+	<script type="text/javascript" src="/autoevaluacion/resources/js/exportTable.js" />
+	
+	
+	
+	<title><ui:insert name="title">
+			<ui:include src="/facelets/templates/title.xhtml" />
+		</ui:insert></title>
+</h:head>
+<h:body>
+	<div id="estatico">
+		<div id="header">
+			<ui:include src="/facelets/templates/header.xhtml" />
+		</div>
+		<div id="globalMsg" align="center">
+			<ui:insert name="msg">
+				<ui:include src="/facelets/templates/globalMsg.xhtml" />
+			</ui:insert>
+		</div>
+
+
+		<div id="titlePage">
+			<h3 id="ti">
+				<ui:insert name="titleMenu" />
+			</h3>
+
+		</div>
+		<div id="bAcciones">
+			<ui:insert name="barraAcciones" />
+		</div>
+		<br />
+		<div id="separator">
+			<p:separator />
+		</div>
+	</div>
+	<div id="contenido">
+		<ui:insert name="contenido">
+			<ui:include src="/facelets/templates/content.xhtml" />
+		</ui:insert>
+	</div>
+	<div id="footer">
+		<ui:insert name="footer">
+			<ui:include src="/facelets/templates/footer.xhtml" />
+		</ui:insert>
+
+	</div>
+
+</h:body>
+</html>

@@ -1,0 +1,73 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<h:form id="updateIndicador">
+		<p:outputPanel>
+			<p:panelGrid id="display" columns="3" cellpadding="4"
+				style="width:100%; margin:0 auto;">
+				<h:outputLabel for="codigo"
+					value="#{autoevaluacion['lbl.caracteristicas.codigo']} #{comun['lbl.obligatorio']}" />
+				<p:inputText id="indicador"
+					value="#{indicadoresMB.selected.indicador}"
+					style="text-transform:uppercase;"
+					valueChangeListener="#{indicadoresMB.validarCodigo()}"
+					onkeyup="javascript:this.value=this.value.toUpperCase();javascript:this.value=this.value.trim();"
+					required="true" maxlength="5"
+					label="#{autoevaluacion['lbl.caracteristicas.codigo']}"
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}">
+					<p:ajax update="msgIndicador" event="keyup" onstart="true" />
+					<p:ajax listener="#{indicadoresMB.validarCodigo(false)}"
+						event="valueChange" process="@this" />
+				</p:inputText>
+				<p:message for="indicador" id="msgIndicador" display="icon" />
+
+				<h:outputLabel for="resumen"
+					value="#{autoevaluacion['lbl.caracteristicas.resumen']} #{comun['lbl.obligatorio']}" />
+				<p:inputTextarea id="resumen" cols="100"
+					value="#{indicadoresMB.selected.resumen}" required="true"
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}">
+
+				</p:inputTextarea>
+				<p:message for="resumen" id="msgResumen" display="icon" />
+
+				<h:outputLabel for="orden"
+					value="#{autoevaluacion['lbl.caracteristicas.orden']} #{comun['lbl.obligatorio']}" />
+				<p:spinner id="orden" min="1"
+					validator="#{indicadoresMB.validarOrden()}"
+					validatorMessage="#{autoevaluacion['msg.warn.caracteristica.orden']}"
+					value="#{indicadoresMB.selected.orden}" required="true"
+					label="#{autoevaluacion['lbl.caracteristicas.orden']}">
+					<p:ajax update="msgOorden" event="keyup" onstart="true" />
+					<p:ajax listener="#{indicadoresMB.validarOrden(false)}"
+						event="valueChange" process="@this" />
+				</p:spinner>
+				<p:message for="orden" id="msgOorden" display="icon" />
+
+
+				<f:facet name="footer">
+					<p:commandLink id="cmlGuardarEditar"
+						update="display :formteba :pnlP"
+						actionListener="#{aspectoMB.editar()}">
+						<p:graphicImage id="btnE" title="#{comun['btn.guardar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/save_f2.png" />
+					</p:commandLink>
+					<p:commandLink id="cmlCancelar" immediate="true"
+						update="display :formteba :pnlP"
+						actionListener="#{aspectoMB.lanzarEditar(false)}">
+						<p:graphicImage id="btnC" title="#{comun['btn.cancelar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/cancel_f2.png" />
+					</p:commandLink>
+
+				</f:facet>
+			</p:panelGrid>
+
+		</p:outputPanel>
+	</h:form>
+</h:body>
+</html>

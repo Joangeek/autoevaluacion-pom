@@ -1,0 +1,93 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<h:form>
+		<p:outputPanel>
+
+			<p:panelGrid id="display" columns="3" cellpadding="4"
+				style="width:100%; margin:0 auto;">
+
+				<h:outputLabel for="nombreETP"
+					value="#{encuestas['lbl.confEncuestas.nombre']} #{comun['lbl.obligatorio']}" />
+				<p:inputTextarea id="nombreETP"
+					value="#{encuestasMB.selected.nombre}"
+					style="text-transform:uppercase;"
+					onkeyup="javascript:this.value=this.value.toUpperCase();"
+					required="true"
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}">
+					<p:ajax update="msgnombreETP" event="keyup" onstart="true" />
+				</p:inputTextarea>
+				<p:message for="nombreETP" id="msgnombreETP" display="icon" />
+				<h:outputLabel for="descripcionETP"
+					value="#{encuestas['lbl.confEncuestas.descripcion']} #{comun['lbl.obligatorio']}" />
+				<p:editor id="descripcionETP"
+					value="#{encuestasMB.selected.descripcion}" required="true"
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}"
+					label="Sede">
+				</p:editor>
+				<p:message for="descripcionETP" id="msgdescripcionETP"
+					display="icon" />
+				<h:outputLabel for="dirigidoA" rendered="true"
+					value="#{encuestas['lbl.confEncuestas.dirigidoa']} #{comun['lbl.obligatorio']}" />
+				<p:selectOneMenu id="dirigidoA"
+					value="#{encuestasMB.selected.tblenc_dirigidoa}"
+					style="width:125px">
+					<f:selectItem noSelectionOption="TRUE"
+						itemValue="#{encuestasMB.selected.tblenc_dirigidoa}"
+						itemLabel="#{encuestasMB.selected.tblenc_dirigidoa.descripcion}" />
+					<f:selectItems value="#{encuestasMB.listaDirigidoA}" var="var"
+						itemLabel="#{var.descripcion}" />
+					<f:converter converterId="GenericConvertEntity" />
+					<p:ajax update="msgdirigidoA" event="valueChange" onstart="true" />
+				</p:selectOneMenu>
+				<p:message for="dirigidoA" id="msgdirigidoA" display="icon" />
+				<h:outputLabel for="modulo"
+					value="#{encuestas['lbl.confEncuestas.modulo']} #{comun['lbl.obligatorio']}" />
+				<p:selectOneMenu id="modulo"
+					value="#{encuestasMB.selected.tblenc_modulo_tipo_evaluacion}"
+					style="width:125px">
+					<f:selectItem
+						itemValue="confEncuestas.selected.tblenc_modulo_tipo_evaluacion"
+						itemLabel="#{encuestasMB.selected.tblenc_modulo_tipo_evaluacion.descripcion}" />
+					<f:selectItems value="#{encuestasMB.listaModulo}" var="var"
+						itemLabel="#{var.descripcion}" />
+					<f:converter converterId="GenericConvertEntity" />
+					<p:ajax update="msgmodulo" event="valueChange" onstart="true" />
+				</p:selectOneMenu>
+				<p:message for="modulo" id="msgmodulo" display="icon" />
+
+				<h:outputLabel for="estadoETP"
+					value="#{encuestas['lbl.confEncuestas.estado']} #{comun['lbl.obligatorio']}" />
+				<p:selectOneMenu id="estadoETP"
+					value="#{encuestasMB.selected.estado}">
+					<f:selectItem itemValue="1"
+						itemLabel="#{comun['lbl.estado.activo']}" />
+					<f:selectItem itemValue="0"
+						itemLabel="#{comun['lbl.estado.inactivo']}" />
+				</p:selectOneMenu>
+				<p:spacer />
+				<f:facet name="footer">
+					<p:commandLink id="cmlGuardarEditar"
+						actionListener="#{encuestasMB.editar}">
+						<p:graphicImage id="btnE" title="#{comun['btn.guardar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/save_f2.png" />
+					</p:commandLink>
+					<p:commandLink id="cmlCancelar" immediate="true"
+						actionListener="#{encuestasMB.lanzarEditar(false)}">
+						<p:graphicImage id="btnC" title="#{comun['btn.cancelar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/cancel_f2.png" />
+					</p:commandLink>
+
+				</f:facet>
+			</p:panelGrid>
+
+		</p:outputPanel>
+	</h:form>
+</h:body>
+</html>

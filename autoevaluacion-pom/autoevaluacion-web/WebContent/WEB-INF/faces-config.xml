@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+	version="2.2">
+	<converter>
+		<converter-id>GenericConvertEntity</converter-id>
+		<converter-class>comun.controlador.util.core.GenericConvertEntity</converter-class>
+	</converter>
+	<converter>
+		<converter-id>GenericConvertEntity2</converter-id>
+		<converter-class>comun.controlador.util.core.GenericConvertEntity2</converter-class>
+	</converter>
+	<!-- <validator> <validator-class>comun.controlador.util.core.ConfirmValidator</validator-class> 
+		<validator-id>ConfirmValidator</validator-id> </validator> -->
+	<navigation-rule>
+		<from-view-id>/login.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>home</from-outcome>
+			<to-view-id>/admin_acceso.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>estudiante</from-outcome>
+			<to-view-id>/indexe.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>egresado</from-outcome>
+			<to-view-id>/indexg.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>empleador</from-outcome>
+			<to-view-id>/empleador.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/facelets/menu.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>login</from-outcome>
+			<to-view-id>/login.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>loginB</display-name>
+		<from-view-id>/facelets/templates/header_.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>login</from-outcome>
+			<to-view-id>/login.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<application>
+		<locale-config>
+			<default-locale>es_CO</default-locale>
+		</locale-config>
+		<resource-bundle>
+			<base-name>idiomas/comun</base-name>
+			<var>comun</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>idiomas.autoevaluacion</base-name>
+			<var>autoevaluacion</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>idiomas.encuestas</base-name>
+			<var>encuestas</var>
+		</resource-bundle>
+	</application>
+</faces-config>

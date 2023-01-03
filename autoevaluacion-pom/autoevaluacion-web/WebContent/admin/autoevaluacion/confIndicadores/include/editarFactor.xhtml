@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<h:form id="updateFactor">
+		<p:outputPanel>
+
+			<p:panelGrid id="display" columns="3" cellpadding="4"
+				style="width:100%; margin:0 auto;">
+				<h:outputLabel for="nombreGR"
+					value="#{autoevaluacion['lbl.factor.nombre']} #{comun['lbl.obligatorio']}" />
+				<p:inputTextarea id="nombreGR" value="#{factoresMB.selected.nombre}" autoResize="true"
+					style="text-transform:uppercase;"
+					onkeyup="javascript:this.value=this.value.toUpperCase();"
+					required="true"
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}">
+					<p:ajax update="msgnombreGA" event="keyup" onstart="true" />
+				</p:inputTextarea>
+				<p:message for="nombreGR" id="msgnombreGA" display="icon" />
+				<h:outputLabel for="ordenGRA"
+					value="#{autoevaluacion['lbl.factor.orden']} #{comun['lbl.obligatorio']}" />
+				<p:spinner id="ordenGRA" min="1" max="15"
+					value="#{factoresMB.selected.orden}" required="true"
+					label="#{autoevaluacion['lbl.factor.orden']}">
+					<p:ajax update="msgordenETP" event="keyup" onstart="true" />
+				</p:spinner>
+				<p:message for="ordenGRA" id="msgordenETP" display="icon" />
+
+				<f:facet name="footer">
+					<p:commandLink id="cmlGuardar" update="display :formteba :pnlP"
+						actionListener="#{factoresMB.editar}">
+						<p:graphicImage id="btnE" title="#{comun['btn.guardar']}"
+							styleClass="imgsBA" alt="#{comun['btn.guardar']}"
+							url="${requestContextPath}/resources/images/save_f2.png" />
+					</p:commandLink>
+					<p:commandLink id="cmlCancelar" immediate="true"
+						update="display :formteba :pnlP"
+						actionListener="#{factoresMB.lanzarEditar(false)}">
+						<p:graphicImage id="btnC" title="#{comun['btn.cancelar']}"
+							styleClass="imgsBA" alt="#{comun['btn.cancelar']}"
+							url="${requestContextPath}/resources/images/cancel_f2.png" />
+					</p:commandLink>
+
+				</f:facet>
+			</p:panelGrid>
+
+		</p:outputPanel>
+	</h:form>
+</h:body>
+</html>

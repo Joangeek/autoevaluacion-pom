@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:form id="formAspecto">
+	<p:dataTable id="dataTableConAs" value="#{aspectoMB.listaAspectos}"
+		filteredValue="#{aspectoMB.listaAspectosFilter}" var="te"
+		selection="#{aspectoMB.selected}" selectionMode="single"
+		rowKey="#{te.oid}" rowIndexVar="rowIndex" widgetVar="dtTable"
+		paginatorAlwaysVisible="false"
+		paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		paginator="true" paginatorPosition="bottom" rows="10"
+		emptyMessage="#{comun['page.table.list.sin.resultados']}"
+		rowsPerPageTemplate="5,10,15,20,30,40,50,100">
+		<p:column style="width:16px;text-align:center">
+			<f:facet name="header">
+					#{comun['lbl.numeral']}
+					</f:facet>
+			<p:outputLabel value="#{rowIndex+1}" styleClass="textTable" />
+		</p:column>
+		<p:ajax event="rowSelect" listener="#{aspectoMB.onRowSelect()}" /> 
+		<p:column filterBy="#{te.descripcion}" filterMatchMode="contains">
+			<f:facet name="header">
+				<p:outputLabel value="#{encuestas['lbl.confEncuestas.nombre']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="teNombre" value="#{te.codigo}:#{te.descripcion}" />
+		</p:column>
+		<p:column filterBy="#{te.tblencTipoAspecto.nombre}"
+			filterMatchMode="in">
+			<f:facet name="filter">
+				<p:selectCheckboxMenu label="#{encuestas['lbl.confEncuestas.tipo']}"
+					onchange="PF('dtTable').filter()" panelStyle="width:155px"
+					scrollHeight="150">
+					<f:selectItems value="#{aspectoMB.listaTipoAspectofilter}"
+						itemValue="#{var.nombre}" var="var" itemLabel="#{var.nombre}" />
+				</p:selectCheckboxMenu>
+			</f:facet>
+			<p:outputLabel id="teDirigido" value="#{te.tblencTipoAspecto.nombre}" />
+		</p:column>
+
+		<p:column>
+			<f:facet name="header">
+				<p:outputLabel value="#{encuestas['lbl.confEncuestas.grupo']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="teTipoEval"
+				value="#{te.tblencGrupoAspecto.nombre}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<p:outputLabel value="#{encuestas['lbl.confEncuestas.peso']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="tPeso" value="#{te.peso}" />
+		</p:column>
+		<p:column filterBy="#{te.orden}" filterMatchMode="contains">
+			<f:facet name="header">
+				<p:outputLabel value="#{encuestas['lbl.confEncuestas.orden']}"
+					styleClass="textTable" />
+			</f:facet>
+			<p:outputLabel id="teOrden" value="#{te.orden}" />
+		</p:column>
+		<p:column headerText="#{encuestas['lbl.confEncuestas.estado']}"
+			style="font-weight:bold; width:8%; text-align:center"
+			filterMatchMode="exact" filterBy="#{te.estado}">
+			<f:facet name="filter">
+				<p:selectOneMenu onchange="PF('dtTable').filter()">
+					<f:selectItem itemLabel="#{comun['lbl.estado.todos']}"
+						itemValue="#{null}" noSelectionOption="true" />
+					<f:selectItem itemLabel="#{comun['lbl.estado.activo']}"
+						itemValue="1" />
+					<f:selectItem itemLabel="#{comun['lbl.estado.inactivo']}"
+						itemValue="0" />
+				</p:selectOneMenu>
+			</f:facet>
+			<p:commandButton id="btnteEstadoA" rendered="#{te.estado==1}"
+				actionListener="#{aspectoMB.cambiarEstado()}" icon="ui-icon-check"
+				title="#{comun['tit.estado.activo']} - #{comun['tit.estado.clic.cambiar']}">
+				<f:setPropertyActionListener target="#{encuestasMB.selected}"
+					value="#{te}" />
+			</p:commandButton>
+			<p:commandButton id="btnteEstadoI" rendered="#{te.estado==0}"
+				actionListener="#{aspectoMB.cambiarEstado()}" icon="ui-icon-close"
+				title="#{comun['tit.estado.inactivo']} - #{comun['tit.estado.clic.cambiar']}">
+				<f:setPropertyActionListener target="#{encuestasMB.selected}"
+					value="#{te}" />
+			</p:commandButton>
+
+		</p:column>
+	</p:dataTable>
+</h:form>
+</html>

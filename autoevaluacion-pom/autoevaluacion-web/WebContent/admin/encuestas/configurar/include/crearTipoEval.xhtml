@@ -1,0 +1,99 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<h:form>
+		<p:outputPanel>
+
+			<p:panelGrid id="display" columns="3" cellpadding="4"
+				style="width:100%; margin:0 auto;">
+
+				<h:outputLabel for="nombreETP"
+					value="#{encuestas['lbl.confEncuestas.nombre']} #{comun['lbl.obligatorio']}" />
+				<p:inputTextarea id="nombreETP"
+					value="#{encuestasMB.tipoEvaluacion.nombre}"
+					style="text-transform:uppercase;"
+					onkeyup="javascript:this.value=this.value.toUpperCase();"
+					required="true"
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}">
+					<p:ajax update="msgnombreETP" event="keyup" onstart="true" />
+				</p:inputTextarea>
+				<p:message for="nombreETP" id="msgnombreETP" display="icon" />
+				<h:outputLabel for="descripcionETP"
+					value="#{encuestas['lbl.confEncuestas.descripcion']} #{comun['lbl.obligatorio']}" />
+				<p:editor id="descripcionETP"
+					value="#{encuestasMB.tipoEvaluacion.descripcion}" required="true"
+					requiredMessage="#{comun['global.msg.campo.obligatorio']}"
+					label="Sede">
+				</p:editor>
+				<p:message for="descripcionETP" id="msgdescripcionETP"
+					display="icon" />
+				<h:outputLabel for="dirigidoA" rendered="true"
+					value="#{encuestas['lbl.confEncuestas.dirigidoa']} #{comun['lbl.obligatorio']}" />
+				<p:selectOneMenu id="dirigidoA" required="true"
+					requiredMessage="#{comun['global.msg.seleccionar.item']}"
+					value="#{encuestasMB.tipoEvaluacion.tblenc_dirigidoa}"
+					style="width:125px">
+					<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+					<f:selectItems value="#{encuestasMB.listaDirigidoA}" var="var"
+						itemLabel="#{var.descripcion}" />
+					<f:converter converterId="GenericConvertEntity" />
+					<p:ajax update="msgdirigidoA" event="valueChange" onstart="true" />
+				</p:selectOneMenu>
+				<p:message for="dirigidoA" id="msgdirigidoA" display="icon" />
+				<h:outputLabel for="modulo"
+					value="#{encuestas['lbl.confEncuestas.modulo']} #{comun['lbl.obligatorio']}" />
+				<p:selectOneMenu id="modulo" required="true"
+					requiredMessage="#{comun['global.msg.seleccionar.item']}"
+					value="#{encuestasMB.tipoEvaluacion.tblenc_modulo_tipo_evaluacion}"
+					style="width:125px">
+					<f:selectItem itemLabel="#{comun['itemLabel.selecione']}" />
+					<f:selectItems value="#{encuestasMB.listaModulo}" var="var"
+						itemLabel="#{var.descripcion}" />
+					<f:converter converterId="GenericConvertEntity" />
+					<p:ajax update="msgmodulo" event="valueChange" onstart="true" />
+				</p:selectOneMenu>
+				<p:message for="modulo" id="msgmodulo" display="icon" />
+
+				<h:outputLabel for="estadoETP"
+					value="#{encuestas['lbl.confEncuestas.estado']} #{comun['lbl.obligatorio']}" />
+				<p:selectOneMenu id="estadoETP"
+					value="#{encuestasMB.tipoEvaluacion.estado}">
+					<f:selectItem itemValue="1"
+						itemLabel="#{comun['lbl.estado.activo']}" />
+					<f:selectItem itemValue="0"
+						itemLabel="#{comun['lbl.estado.inactivo']}" />
+				</p:selectOneMenu>
+				<p:spacer />
+				<f:facet name="footer">
+					<p:commandLink id="cmlGuardarEditar" update="display :formteba"
+						actionListener="#{encuestasMB.crear()}">
+						<p:graphicImage id="btnE" title="#{comun['btn.guardar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/save_f2.png" />
+					</p:commandLink>
+					<p:commandLink id="cmlLimpiar" immediate="true" update="display"
+						process="@this" actionListener="#{encuestasMB.lanzarCrear(true)}">
+						<p:graphicImage id="btnL" title="#{comun['btn.limpiar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/clear_f2.png" />
+						<p:resetInput target="display" />
+					</p:commandLink>
+					<p:commandLink id="cmlCancelar" immediate="true"
+						style="float:right;" update="display :formteba :pnlP :dlgNuevoTE"
+						actionListener="#{encuestasMB.lanzarCrear(false)}">
+						<p:graphicImage id="btnC" title="#{comun['btn.cancelar']}"
+							styleClass="imgsBA" alt="#{comun['btn.editar']}"
+							url="${requestContextPath}/resources/images/cancel_f2.png" />
+						<p:resetInput target="display" />
+					</p:commandLink>
+				</f:facet>
+			</p:panelGrid>
+
+		</p:outputPanel>
+	</h:form>
+</h:body>
+</html>

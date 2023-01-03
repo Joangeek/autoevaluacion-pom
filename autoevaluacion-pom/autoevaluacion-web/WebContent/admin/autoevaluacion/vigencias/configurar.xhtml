@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/facelets/templates/template.xhtml">
+
+	<ui:define name="titleMenu">
+		<p:graphicImage width="33"
+			url="${requestContexteath}/resources/images/generic.png" />
+
+		<p:outputLabel id="tituloConf" value="#{confVigenciaMB.titulo}" />
+	</ui:define>
+	<ui:define name="barraAcciones">
+		<h:form id="formteba">
+			<p:outputPanel id="outenl" style="floal:right;">
+
+				<p:commandLink rendered="#{confVigenciaMB.acRegresar}"
+					update=":formteba :pnlP :tituloConf">
+					<p:graphicImage id="btnR" styleClass="imgsBA"
+						title="#{comun['btn.regresar']}" alt="#{comun['btn.regresar']}"
+						url="${requestContexteath}/resources/images/back_f2.png" />
+				</p:commandLink>
+
+				<p:commandLink id="cmlVigencias"
+					rendered="#{confVigenciaMB.acVigencias}"
+					update=":formteba :pnlP :tituloConf">
+					<p:graphicImage id="btnFactor"
+						title="#{autoevaluacion['btn.condigurar.factores']}"
+						styleClass="imgsBA"
+						alt="#{autoevaluacion['btn.condigurar.factores']}"
+						url="${requestContexteath}/resources/images/config_f2.gif" />
+				</p:commandLink>
+
+
+				<p:commandLink id="cmlCrear" rendered="#{confVigenciaMB.acCrear}"
+					update=":formteba :pnlP "
+					actionListener="#{confVigenciaMB.lanzarCrear(true)}">
+					<p:graphicImage id="btnN" title="#{comun['btn.nuevo']}"
+						styleClass="imgsBA" alt="#{comun['btn.nuevo']}"
+						url="${requestContexteath}/resources/images/new_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="cmlEditar" rendered="#{confVigenciaMB.acEditar}"
+					update=":formteba :pnlP "
+					actionListener="#{confVigenciaMB.lanzarEditar(true)}">
+					<p:graphicImage id="btnE" title="#{comun['btn.editar']}"
+						styleClass="imgsBA" alt="#{comun['btn.editar']}"
+						url="${requestContexteath}/resources/images/edit_f2.png" />
+				</p:commandLink>
+				<p:commandLink id="btnDell" rendered="#{confVigenciaMB.acEliminar}"
+					update=":formteba :pnlP "
+					actionListener="#{confVigenciaMB.eliminar()}">
+					<p:graphicImage id="btnEl" title="#{comun['btn.eliminar']}"
+						styleClass="imgsBA" alt="#{comun['btn.eliminar']}"
+						url="${requestContexteath}/resources/images/trash_f2.png" />
+					<p:confirm header="Confirmation"
+						message="#{comun['global.msg.lbl.confirm']}" icon="ui-icon-alert" />
+				</p:commandLink>
+			</p:outputPanel>
+		</h:form>
+	</ui:define>
+	<ui:define name="contenido">
+		<p:panel id="pnlP">
+			<p:dataTable id="dataTableVigencias" var="te"
+				selection="#{confVigenciaMB.selected}" selectionMode="single"
+				value="#{confVigenciaMB.listado}"
+				filteredValue="#{confVigenciaMB.listadoFilter}" rowKey="#{te.oid}"
+				rowIndexVar="rowIndex" widgetVar="dtTable"
+				paginatorAlwaysVisible="false"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				paginator="true" paginatorPosition="bottom" rows="5"
+				emptyMessage="#{comun['page.table.list.sin.resultados']}"
+				rowsPerPageTemplate="5,10,15,20,30,40,50,100,200">
+				
+				<f:facet name="header">
+					<p:outputLabel
+						value="#{autoevaluacion['header.vigencia.listado.vigencia']}" />
+				</f:facet>
+
+				<p:column style="width:16px;text-align:center">
+					<p:outputLabel value="#{rowIndex+1}" styleClass="textTable" />
+				</p:column>
+				<p:ajax event="rowSelect" listener="#{confVigenciaMB.onRowSelect()}" />
+				<p:column sortBy="#{te.anioVigencia}" filterBy="#{te.anioVigencia}"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<p:outputLabel value="#{autoevaluacion['lbl.vigencia.anio']}"
+							styleClass="textTable" />
+					</f:facet>
+					<p:outputLabel id="anio" value="#{te.anioVigencia}" />
+				</p:column>
+				<p:column sortBy="#{te.fechaApertura}"
+					filterBy="#{te.fechaApertura}" filterMatchMode="contains">
+					<f:facet name="header">
+						<p:outputLabel
+							value="#{autoevaluacion['lbl.vigencia.fecha.apertura']}"
+							styleClass="textTable" />
+					</f:facet>
+					<p:outputLabel id="apertura" value="#{te.fechaApertura}" />
+				</p:column>
+
+
+				<p:column sortBy="#{te.fechaCierre}" filterBy="#{te.fechaCierre}"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<p:outputLabel
+							value="#{autoevaluacion['lbl.vigencia.fecha.cierre']}"
+							styleClass="textTable" />
+					</f:facet>
+					<p:outputLabel id="cierre" value="#{te.fechaCierre}" />
+				</p:column>
+
+			</p:dataTable>
+
+			<!-- Includes de Vigencias -->
+			<p:dialog id="dlgNuevaVigencia" widgetVar="dlgNewVigencia"
+				modal="true"
+				header="#{autoevaluacion['header.vigencia.crear.vigencia']}"
+				closable="false" visible="#{confVigenciaMB.crear}" resizable="false">
+				<ui:include
+					src="/admin/autoevaluacion/vigencias/include/crearVigencia.xhtml" />
+			</p:dialog>
+			<p:dialog id="dlgEditarVigencia" widgetVar="dlgEditVigencia"
+				modal="true"
+				header="#{autoevaluacion['header.vigencia.editar.vigencia']}"
+				closable="false" visible="#{confVigenciaMB.editar}"
+				resizable="false">
+				<ui:include
+					src="/admin/autoevaluacion/vigencias/include/editarVigencia.xhtml" />
+			</p:dialog>
+
+
+
+			<!-- Confirmacion -->
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+				header="#{comun['pnl.confirmacion']}">
+				<p:commandButton value="#{comun['btn.confirm.yes']}" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="#{comun['btn.confirm.not']}" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

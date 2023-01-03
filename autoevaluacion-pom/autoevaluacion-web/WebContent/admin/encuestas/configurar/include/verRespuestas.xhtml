@@ -1,0 +1,74 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<h:form id="viewVerRes">
+		<p:outputPanel id="outPnlView">
+			<p:commandLink process="@this" width="24" immediate="true"
+				onclick=" document.getElementById('formprevisualizacion:viewVerRes:btn_descargarXLS').click();">
+				<p:graphicImage alt="#{comun['btn.exportar.xls']}"
+					title="#{comun['btn.exportar.xls']}"
+					url="${requestContexteath}/resources/images/excel.png" width="24" />
+			</p:commandLink>
+
+			<h:commandLink process="@this" width="24" immediate="true"
+				onclick=" document.getElementById('formprevisualizacion:viewVerRes:btn_descargarPDF').click();">
+				<p:graphicImage alt="#{comun['btn.exportar.pdf']}"
+					title="#{comun['btn.exportar.pdf']}"
+					url="${requestContexteath}/resources/images/pdf.png" width="24" />
+			</h:commandLink>
+
+			<p:commandLink id="cmlCancelarVR" immediate="true"
+				style="float:right;" update=":formprevisualizacion "
+				actionListener="#{previsualizarMB.cerrarVerRespuestas()}">
+				<p:graphicImage id="btnCVerR" title="#{comun['btn.cancelar']}"
+					alt="#{comun['btn.cancelar']}" width="24"
+					url="${requestContextPath}/resources/images/cancel_f2.png" />
+			</p:commandLink>
+			<p:commandButton id="btn_descargarXLS" value="Xls" ajax="false"
+				immediate="true" style="display:none;" process="@this">
+				<p:dataExporter type="xls" target="dataTableverResEncA"
+					fileName="#{previsualizarMB.selected.nombre}" />
+			</p:commandButton>
+			<p:commandButton id="btn_descargarPDF" value="Pdf" ajax="false"
+				immediate="true" style="display:none;">
+				<p:dataExporter type="pdf" target="dataTableverResEncA"
+					fileName="#{previsualizarMB.selected.nombre}" />
+			</p:commandButton>
+
+			<p:dataTable id="dataTableverResEncA"
+				value="#{previsualizarMB.listaResultadoEncuesta}" var="te"
+				paginatorPosition="bottom" rowIndexVar="rowIndex"
+				widgetVar="dtTable"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+				paginator="true" rows="10">
+				<p:column style="width:10px;text-align:center">
+					<f:facet name="header">
+					#
+					</f:facet>
+					<p:outputLabel value="#{rowIndex+1}" styleClass="textTable" />
+				</p:column>
+				<p:column headerText="Grupo" style="width:18%;">
+					<p:outputLabel id="grupo"
+						value="#{te.aspecto.tblencGrupoAspecto.nombre}" />
+				</p:column>
+				<p:column style="width:7%;">
+					<f:facet name="header">
+					Código
+					</f:facet>
+					<p:outputLabel id="codigo" value="#{te.aspecto.codigo}" />
+				</p:column>
+				<p:column headerText="Aspecto" style="width:55%;">
+					<p:outputLabel id="aspecto" value="#{te.aspecto.descripcion}" />
+				</p:column>
+				<p:column headerText="Respuesta" style="width:20%;">
+					<p:outputLabel id="respuesta" value="#{te.respuesta.nombre}" />
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+	</h:form>
+</h:body>
+</html>

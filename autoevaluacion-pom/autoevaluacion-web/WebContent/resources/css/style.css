@@ -1,0 +1,159 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	font-size: 56.3%;
+	font-family: inherit;
+	background-color: #fff;
+	margin: 0px;
+}
+
+#estatico {
+	clear: both; 
+}
+
+/*
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	*/
+#header {
+	width: 100%;
+	float: left;
+	background-color: #6CA6D1;
+	clear: both;
+	border-bottom: 2px solid #4297D7;
+}
+
+#divLogo {
+	width: 10%;
+	padding: 0.5em 1em;
+	float: left;
+}
+
+#divMenu {
+	width: 84%;
+	padding: 0.5em 1em;
+	float: right;
+	vertical-align: middle;
+}
+
+/*
+	height: 30px;
+	border: 1px #620 solid;
+*/
+#globalMsg {
+	height: 30px;
+	background-color: transparent;
+	width: 59%;
+	position: fixed;
+	margin-left: 20%;
+	margin-right: 20%;
+	margin-top: 4.5%;
+	float: inherit;
+}
+/*
+border: 1px #f60 solid;
+*/
+#titlePage {
+	background-color: transparent;
+	margin-left:15px;
+	height: 45px;
+	float: left;
+
+	vertical-align: middle;
+}
+
+
+#bAcciones {
+	background-color: transparent;
+	margin: 10px 1% 5px 1%;
+	height: 35px;
+	float: right;
+}
+
+.imgsBA {
+	margin-left: 3px;
+	border: 1px solid #dfeffc;
+	padding: 1px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.gridRepor {
+	margin-left: 10px;
+	font-size: 120%;
+	font-weight: bold;
+}
+
+.gridReporEncuestas {
+	font-size: 100%;
+	font-weight: bold;
+}
+
+#separator {
+	height: 2px;
+	margin: 0;
+	clear: both;
+	background-color: #4297D7;
+}
+
+#contenido {
+	margin-left: 2px;
+	margin-right: 2px;
+	background-color: transparent;
+	clear: both;
+	background-color: transparent;
+}
+
+/**
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+**/
+#footer {
+	width: 100%;
+	border-TOP: 1px solid #4297D7;
+	background-color: #6CA6D1;
+	float: left;
+	margin-top: 5px;
+}
+
+.ui-button {
+	background: none;
+}
+
+.btnGuardar {
+	background-image:
+		url(${requestContextPath}/resources/img/32/btn_guardar.png)
+}
+
+.btnAcciones {
+	margin-left: 5px;
+	border: 1px solid #72A9D3;
+	padding: 1px;
+}
+
+.textTable label {
+	font-size: 36.3%;
+	font-family: inherit;
+}
+
+.ui-dock-container-top {
+	position: absolute !important;
+	display: block;
+}
+
+.ui-widget-header .ui-dock-container-top {
+	border: auto;
+}
+
+.ui-panel .ui-panel-content {
+	
+}
+
+#matriz td {
+	border-bottom: 1px solid #A6C9E2;
+	border-collapse: collapse;
+	border-left: 1px solid #A6C9E2;
+	border-right: 1px solid #A6C9E2;
+	border-spacing: 2px;
+	border-top: 1px solid #A6C9E2;
+}
